@@ -1173,8 +1173,8 @@ input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); }
 .db-foot { margin-top: 24px; color: var(--muted); font-size: 12.5px; text-align: center; }
 
 /* ---------- 觸控 ---------- */
-.touch { display: none; }
-body.touch.playing .touch { display: block; }
+#touch { display: none; } /* 只藏搖桿容器；不能寫 .touch，body 在觸控裝置也會加上 touch class，會把整頁藏掉 */
+body.touch.playing #touch { display: block; }
 .t-stick { position: fixed; left: 28px; bottom: 28px; width: 124px; height: 124px; border-radius: 50%; border: 2px solid var(--line-2); background: rgba(18, 20, 22, .35); z-index: 26; touch-action: none; }
 .t-knob { position: absolute; left: 50%; top: 50%; width: 52px; height: 52px; margin: -26px 0 0 -26px; border-radius: 50%; background: rgba(224, 228, 235, .35); }
 .t-look { position: fixed; right: 0; top: 0; bottom: 0; width: 55%; z-index: 24; touch-action: none; }
