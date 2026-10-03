@@ -1041,7 +1041,11 @@ input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); }
 .ph-wh { border: 1px solid var(--line-2); background: none; color: var(--fg-2); border-radius: 999px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
 .ph-wh.on { border-color: var(--run); color: var(--run); }
 .ph-hang { border: 0; background: var(--danger); color: #fff; border-radius: 999px; padding: 4px 16px; cursor: pointer; font-weight: 700; }
-.ph-hint { font-size: 12px; color: var(--fg-2); text-shadow: 0 1px 3px #000; }
+.ph-hint { font-size: 12px; color: var(--fg-2); text-shadow: 0 1px 3px #000; max-width: 300px; text-align: center; }
+.ph-q kbd, .ph-bri kbd, .ph-wh kbd, .ph-hang kbd, .ph-app kbd { font-size: 10px; padding: 1px 4px; margin-right: 4px; }
+.ph-q kbd { margin: 0 0 0 2px; }
+.ph-bri input { flex: 1; min-width: 0; }
+.ph-hang kbd { color: #fff; border-color: rgba(255, 255, 255, .5); }
 
 /* ---------- 決策 ---------- */
 .decision { position: fixed; inset: 0; z-index: 40; display: grid; place-items: center; padding: 16px; background: radial-gradient(ellipse at center, rgba(10, 11, 12, .35), rgba(10, 11, 12, .82)); opacity: 0; transition: opacity .25s; }
@@ -1086,6 +1090,7 @@ input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); }
 .c-drop { position: relative; padding: 22px; border-radius: 12px; border: 1.5px dashed var(--line-2); text-align: center; color: var(--fg-2); }
 .c-drop.over { border-color: var(--accent); background: rgba(38, 167, 176, .08); }
 .c-drop input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.c-drop:focus-within { border-color: var(--cyan); outline: 2px solid var(--cyan); outline-offset: 2px; }
 .c-msg { color: var(--aqua); min-height: 1.2em; }
 .c-issues { margin: 0; padding-left: 20px; color: var(--alert); font-size: 13px; }
 .c-issues:empty { display: none; }
@@ -1406,7 +1411,7 @@ window.RHA_VOICES = {"v":1,"made":"2026-10-03","info":{"assailant_52c7ee42":{"wh
     <span class="bt"></span>
   </div>
   <div id="h-check" class="h-check" hidden></div>
-  <div id="h-keys" class="h-keys"><kbd>WASD</kbd>移動 <kbd>Shift</kbd>快跑 <kbd>C</kbd>蹲下 <kbd>E</kbd>互動／長按上鎖 <kbd>Q</kbd>手機 <kbd>空白</kbd>呼吸調節 <kbd>Esc</kbd>暫停</div>
+  <div id="h-keys" class="h-keys"><kbd>WASD</kbd>移動 <kbd>方向鍵</kbd>轉視角 <kbd>Shift</kbd>快跑 <kbd>C</kbd>蹲下 <kbd>E</kbd>互動／長按上鎖 <kbd>Q</kbd>手機（開著時 <kbd>M</kbd>鈴聲 <kbd>V</kbd>震動 <kbd>[ ]</kbd>亮度 <kbd>H</kbd>掛斷） <kbd>空白</kbd>呼吸調節 <kbd>Esc</kbd>暫停</div>
   <div id="h-fade" class="h-fade"></div>
 </div>
 <div id="touch" class="touch"></div>
@@ -1434,7 +1439,7 @@ window.RHA_VOICES = {"v":1,"made":"2026-10-03","info":{"assailant_52c7ee42":{"wh
   <div class="ps-inner" role="dialog" aria-modal="true" aria-labelledby="ps-h">
     <h2 id="ps-h">暫停</h2>
     <div class="ps-btns"><button id="p-resume" class="btn primary" type="button">繼續演練</button><button id="p-restart" class="btn" type="button">重新開始</button><button id="p-title" class="btn ghost" type="button">回主選單</button></div>
-    <div class="ps-keys"><kbd>WASD</kbd>移動　<kbd>Shift</kbd>快跑　<kbd>C</kbd>蹲下　<kbd>E</kbd>互動（長按：上鎖／堵門）　<kbd>Q</kbd>手機　<kbd>空白鍵</kbd>方塊呼吸</div>
+    <div class="ps-keys"><kbd>WASD</kbd>移動　<kbd>方向鍵</kbd>轉視角　<kbd>Shift</kbd>快跑　<kbd>C</kbd>蹲下　<kbd>E</kbd>互動（長按：上鎖／堵門）　<kbd>Q</kbd>手機　<kbd>空白鍵</kbd>方塊呼吸　手機開著：<kbd>M</kbd>鈴聲　<kbd>V</kbd>震動　<kbd>[</kbd><kbd>]</kbd>亮度　<kbd>H</kbd>掛斷　選單：<kbd>Tab</kbd>切換　<kbd>Enter</kbd>確認　<kbd>Esc</kbd>繼續</div>
   </div>
 </div>
 <div id="clickgate" class="clickgate" hidden><span>點一下畫面繼續</span></div>
@@ -1447,15 +1452,21 @@ window.RHA_VOICES = {"v":1,"made":"2026-10-03","info":{"assailant_52c7ee42":{"wh
   <div class="dlg-box" role="dialog" aria-modal="true" aria-labelledby="dh-h">
     <h2 id="dh-h">操作說明</h2>
     <dl class="keys">
-      <dt><kbd>W A S D</kbd></dt><dd>移動（方向鍵也可以）</dd>
-      <dt>滑鼠</dt><dd>轉動視角。點一下畫面鎖定滑鼠，若無法鎖定可按住左鍵拖曳</dd>
+      <dt><kbd>W A S D</kbd></dt><dd>移動</dd>
+      <dt><kbd>← → ↑ ↓</kbd></dt><dd>轉動視角（左右轉向、上下抬頭低頭），不用滑鼠也能玩</dd>
+      <dt>滑鼠</dt><dd>轉動視角（可與方向鍵並用）。點一下畫面鎖定滑鼠，若無法鎖定可按住左鍵拖曳</dd>
       <dt><kbd>Shift</kbd></dt><dd>快跑（腳步聲很大）</dd>
       <dt><kbd>C</kbd></dt><dd>蹲下／站起（比較安靜，也比較不容易被看見）</dd>
       <dt><kbd>E</kbd></dt><dd>開關門、關燈、互動；在房間內<b>長按</b>可以上鎖、推櫃子堵門</dd>
-      <dt><kbd>Q</kbd></dt><dd>拿出手機：切換鈴聲與震動、調亮度、撥打 110</dd>
+      <dt><kbd>Q</kbd></dt><dd>拿出／收起手機：切換鈴聲與震動、調亮度、撥打 110（手機開著時仍可用 WASD 移動）</dd>
+      <dt><kbd>M</kbd> <kbd>V</kbd> <kbd>[</kbd> <kbd>]</kbd></dt><dd>手機開著時：M 鈴聲開／靜音、V 震動開／關、[ 亮度降、] 亮度升</dd>
+      <dt><kbd>Enter</kbd></dt><dd>手機主畫面進入撥號；撥號時輸入數字（<kbd>Backspace</kbd> 刪除，沒號碼時再按＝返回），<kbd>Enter</kbd> 撥出</dd>
+      <dt><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></dt><dd>來電時：1 拒接、2 接聽、3 傳訊息</dd>
+      <dt><kbd>X</kbd> <kbd>H</kbd></dt><dd>通話中：X 切換小聲說話、H 掛斷</dd>
       <dt><kbd>空白鍵</kbd></dt><dd>方塊呼吸：跟著畫面提示吸氣、屏息、吐氣，可以讓心跳慢下來</dd>
       <dt><kbd>1–4</kbd></dt><dd>決策時刻或通話時選擇回答</dd>
-      <dt><kbd>Esc</kbd></dt><dd>暫停</dd>
+      <dt><kbd>Esc</kbd></dt><dd>暫停（手機開著時先收起手機；視窗開著時關閉視窗）</dd>
+      <dt><kbd>Tab</kbd></dt><dd>選單、對話框、講評頁：Tab／Shift+Tab 切換按鈕，Enter 或空白鍵確認。全程不用滑鼠也能玩</dd>
     </dl>
     <p class="dlg-note">左下角的心跳、音量、可見度會即時反映你的狀態：跑步、講話、手機響都會讓暴徒聽到；燈光越亮、越多地方看得到你，可見度就越高。</p>
     <div class="dlg-foot"><button class="btn primary" type="button" data-close>知道了</button></div>
@@ -1468,7 +1479,7 @@ window.RHA_VOICES = {"v":1,"made":"2026-10-03","info":{"assailant_52c7ee42":{"wh
     <div class="form-grid">
       <label for="s-master">主音量</label><input id="s-master" type="range" min="0" max="1" step="0.05">
       <label for="s-body">心跳與呼吸聲</label><input id="s-body" type="range" min="0" max="1.5" step="0.1">
-      <label for="s-sens">滑鼠靈敏度</label><input id="s-sens" type="range" min="0.3" max="2.5" step="0.1">
+      <label for="s-sens">視角靈敏度（滑鼠／方向鍵）</label><input id="s-sens" type="range" min="0.3" max="2.5" step="0.1">
       <label for="s-fov">視野</label><input id="s-fov" type="range" min="60" max="95" step="1">
       <label for="s-quality">畫質</label><select id="s-quality"><option value="0">流暢（舊電腦）</option><option value="1">標準（內顯建議）</option><option value="2">高畫質（獨立顯卡）</option></select>
       <label for="s-voice">中文語音廣播</label><input id="s-voice" type="checkbox">
@@ -5620,12 +5631,13 @@ class Input {
   constructor(canvas) {
     this.canvas = canvas; this.keys = new Set(); this.hitSet = new Set(); this.upSet = new Set();
     this.mdx = 0; this.mdy = 0; this.locked = false; this.dragging = false; this.dragMode = false; this.wantLock = false; this.lockFailed = false;
-    this.touch = { active: false, mx: 0, mz: 0 }; this.sens = 1; this.invertY = false; this.enabled = true; this.onKey = null;
+    this.touch = { active: false, mx: 0, mz: 0 }; this.sens = 1; this.invertY = false; this.enabled = true; this.onKey = null; this.captureKeys = null;
     window.addEventListener('keydown', (e) => {
       if (e.target && ((e.target.tagName === 'INPUT' && (e.target.type === 'text' || e.target.type === 'search')) || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT')) return;
-      if (e.target && e.target.tagName === 'INPUT' && e.target.type === 'range' && e.code !== 'ArrowLeft' && e.code !== 'ArrowRight') e.target.blur();
+      if (e.target && e.target.tagName === 'INPUT' && e.target.type === 'range' && e.code !== 'ArrowLeft' && e.code !== 'ArrowRight' && e.code !== 'Tab') e.target.blur();
       if (this.onKey && this.onKey(e)) { e.preventDefault(); return; }
-      if (GAME_KEYS.has(e.code) && this.enabled) e.preventDefault();
+      // 只在遊戲進行中攔截遊戲鍵；選單、對話框、講評要讓 Tab／空白鍵維持原本的焦點與按鈕操作
+      if (GAME_KEYS.has(e.code) && this.enabled && (!this.captureKeys || this.captureKeys())) e.preventDefault();
       if (!this.keys.has(e.code)) this.hitSet.add(e.code);
       this.keys.add(e.code);
     });
@@ -6279,12 +6291,16 @@ class Game {
     if (this.state === 'playing' && !this.phone.open) {
       const k = 0.0022 * set.sens;
       p.yaw = angWrap(p.yaw + I.mdx * k); p.pitch = clamp(p.pitch - I.mdy * k * (set.invertY ? -1 : 1), -1.3, 1.3);
+      // 方向鍵轉視角（與滑鼠疊加）：←→ 轉向、↑↓ 抬頭低頭；用實際時間 rdt，不受決策慢動作影響
+      const ay = (I.down('ArrowRight') ? 1 : 0) - (I.down('ArrowLeft') ? 1 : 0), ap = (I.down('ArrowUp') ? 1 : 0) - (I.down('ArrowDown') ? 1 : 0);
+      if (ay) p.yaw = angWrap(p.yaw + ay * 2.0 * set.sens * rdt);
+      if (ap) p.pitch = clamp(p.pitch + ap * 1.4 * set.sens * rdt * (set.invertY ? -1 : 1), -1.3, 1.3);
     }
     // 移動輸入
     let mx = 0, mz = 0;
     if (canMove) {
-      if (I.down('KeyW') || I.down('ArrowUp')) mz += 1; if (I.down('KeyS') || I.down('ArrowDown')) mz -= 1;
-      if (I.down('KeyD') || I.down('ArrowRight')) mx += 1; if (I.down('KeyA') || I.down('ArrowLeft')) mx -= 1;
+      if (I.down('KeyW')) mz += 1; if (I.down('KeyS')) mz -= 1;
+      if (I.down('KeyD')) mx += 1; if (I.down('KeyA')) mx -= 1;
       if (I.touch.active) { mx += I.touch.mx; mz -= I.touch.mz; }
       if (I.hit('KeyC')) p.crouchT = p.crouchT ? 0 : 1;
     }
@@ -7065,7 +7081,7 @@ class Phone {
   reset() {
     this.open = false; this.ringer = true; this.vibrate = true; this.bright = 0.85; this.screen = 'home'; this.num = '';
     this.incoming = null; this.ringing = false; this.call = null; this.whisper = true; this.notes = []; this.token = (this.token || 0) + 1; this.missed = 0; this._choose = null; this.curOpts = null;
-    if (this.whBtn) { this.whBtn.classList.add('on'); this.whBtn.textContent = '小聲說話：開'; }
+    if (this.whBtn) this.renderWh();
     if (this.opts) this.opts.innerHTML = '';
     this.el.hidden = true; this.el.classList.remove('up'); this.renderQuick(); this.setScreen('home'); this.renderNotes();
     if (this.g.audio) { this.g.audio.phoneRing(false); this.g.audio.phoneVibrate(false); }
@@ -7078,15 +7094,15 @@ class Phone {
     this.btnRing = h('button', { class: 'ph-q', type: 'button', id: 'ph-ring', onclick: () => this.setRinger(!this.ringer) });
     this.btnVib = h('button', { class: 'ph-q', type: 'button', id: 'ph-vib', onclick: () => this.setVibrate(!this.vibrate) });
     this.bri = h('input', { type: 'range', min: '4', max: '100', value: '85', id: 'ph-bri', 'aria-label': '螢幕亮度' });
-    this.bri.addEventListener('input', () => { this.bright = +this.bri.value / 100; this.dim.style.opacity = String(clamp(1 - this.bright, 0, 0.92)); g.metrics.phoneBright(this.bright); });
-    const quick = h('div', { class: 'ph-quick' }, this.btnRing, this.btnVib, h('label', { class: 'ph-bri', for: 'ph-bri' }, h('span', { class: 'ph-ico' }), this.bri));
+    this.bri.addEventListener('input', () => this.setBright(+this.bri.value / 100));
+    const quick = h('div', { class: 'ph-quick' }, this.btnRing, this.btnVib, h('label', { class: 'ph-bri', for: 'ph-bri' }, h('span', { class: 'ph-ico' }), h('kbd', { text: '[' }), this.bri, h('kbd', { text: ']' })));
     quick.querySelector('.ph-ico').innerHTML = ICON.sun;
     this.scr = h('div', { class: 'ph-screen' });
     // 主畫面
     this.home = h('div', { class: 'ph-home' },
       this.clockBig = h('div', { class: 'ph-clock', text: '14:37' }), this.dateEl = h('div', { class: 'ph-date' }),
       this.noteList = h('div', { class: 'ph-notes' }),
-      h('div', { class: 'ph-apps' }, h('button', { class: 'ph-app', type: 'button', onclick: () => this.setScreen('dialer') }, h('span', { class: 'ph-appi' }), '撥號')));
+      h('div', { class: 'ph-apps' }, h('button', { class: 'ph-app', type: 'button', onclick: () => this.setScreen('dialer') }, h('span', { class: 'ph-appi' }), '撥號', h('kbd', { text: 'Enter' }))));
     this.home.querySelector('.ph-appi').innerHTML = ICON.call;
     // 撥號
     this.numEl = h('div', { class: 'ph-num', 'aria-live': 'polite' });
@@ -7109,27 +7125,39 @@ class Phone {
     // 通話
     this.callHead = h('div', { class: 'ph-callhead' }); this.callTimer = h('span', { class: 'ph-ctime' });
     this.trans = h('div', { class: 'ph-trans', 'aria-live': 'polite' }); this.opts = h('div', { class: 'ph-opts' });
-    this.whBtn = h('button', { class: 'ph-wh on', type: 'button', onclick: () => { this.whisper = !this.whisper; this.whBtn.classList.toggle('on', this.whisper); this.whBtn.textContent = this.whisper ? '小聲說話：開' : '小聲說話：關'; }, text: '小聲說話：開' });
+    this.whBtn = h('button', { class: 'ph-wh on', type: 'button', onclick: () => this.setWhisper(!this.whisper) }); this.renderWh();
     this.callEl = h('div', { class: 'ph-call' }, h('div', { class: 'ph-callbar' }, this.callHead, this.callTimer), this.trans, this.opts,
-      h('div', { class: 'ph-callfoot' }, this.whBtn, h('button', { class: 'ph-hang', type: 'button', text: '掛斷', onclick: () => this.hangup(true) })));
+      h('div', { class: 'ph-callfoot' }, this.whBtn, h('button', { class: 'ph-hang', type: 'button', onclick: () => this.hangup(true) }, h('kbd', { text: 'H' }), '掛斷')));
     this.scr.append(this.home, this.dialer, this.incomingEl, this.callEl);
     this.dim = h('div', { class: 'ph-dim' });
     const body = h('div', { class: 'ph-body' }, status, quick, this.scr, this.dim);
-    this.el.append(body, h('div', { class: 'ph-hint', text: 'Q 收起手機　數字鍵撥號　1–4 選擇回答' }));
+    this.el.append(body, this.hintEl = h('div', { class: 'ph-hint' }));
     document.getElementById('hud').append(this.el);
   }
   renderQuick() {
-    this.btnRing.innerHTML = (this.ringer ? ICON.bell : ICON.bellOff) + `<span>${this.ringer ? '鈴聲開' : '靜音'}</span>`;
+    this.btnRing.innerHTML = (this.ringer ? ICON.bell : ICON.bellOff) + `<span>${this.ringer ? '鈴聲開' : '靜音'}</span><kbd>M</kbd>`;
     this.btnRing.classList.toggle('on', this.ringer);
-    this.btnVib.innerHTML = ICON.vib + `<span>${this.vibrate ? '震動開' : '震動關'}</span>`;
+    this.btnVib.innerHTML = ICON.vib + `<span>${this.vibrate ? '震動開' : '震動關'}</span><kbd>V</kbd>`;
     this.btnVib.classList.toggle('on', this.vibrate);
     this.stIcons.innerHTML = (this.ringer ? '' : ICON.bellOff) + (this.vibrate ? ICON.vib : '') + '<i class="ph-sig"></i><i class="ph-bat"></i>';
     if (this.g.hud) this.g.hud.phoneState(this.ringer, this.vibrate);
   }
   setRinger(on) { this.ringer = on; this.renderQuick(); this.g.metrics.phoneSetting(this.ringer, this.vibrate); this.g.audio.uiBlip('tick'); if (this.ringing) this._ringAudio(); }
   setVibrate(on) { this.vibrate = on; this.renderQuick(); this.g.metrics.phoneSetting(this.ringer, this.vibrate); this.g.audio.uiBlip('tick'); if (this.ringing) this._ringAudio(); }
+  // 亮度（滑桿與 [ ] 鍵共用）：4–100%，同步暗化遮罩與計分
+  setBright(v) {
+    const pct = clamp(Math.round(v * 100), 4, 100); this.bright = pct / 100; this.bri.value = String(pct);
+    this.dim.style.opacity = String(clamp(1 - this.bright, 0, 0.92)); this.g.metrics.phoneBright(this.bright);
+  }
+  setWhisper(on) { this.whisper = on; this.renderWh(); }
+  renderWh() { this.whBtn.classList.toggle('on', this.whisper); this.whBtn.innerHTML = '<kbd>X</kbd>' + (this.whisper ? '小聲說話：開' : '小聲說話：關'); }
+  // 底部鍵位提示依畫面切換
+  renderHint() {
+    const t = { home: 'M 鈴聲　V 震動　[ ] 亮度　數字鍵或 Enter 撥號　Q 收起', dialer: '數字鍵輸入　Enter 撥出　退格 刪除（沒號碼時再按＝返回）　Q 收起', incoming: '1 拒接　2 接聽　3 傳訊息　M 靜音　Q 收起', call: '1–4 選擇回答　X 小聲說話　H 掛斷　Q 收起' };
+    this.hintEl.textContent = t[this.screen] || '';
+  }
   setScreen(s) {
-    this.screen = s;
+    this.screen = s; this.renderHint();
     this.home.hidden = s !== 'home'; this.dialer.hidden = s !== 'dialer'; this.incomingEl.hidden = s !== 'incoming'; this.callEl.hidden = s !== 'call';
     if (s === 'dialer') { this.renderNum(); this.renderContacts(); }
   }
@@ -7275,14 +7303,20 @@ class Phone {
   }
   onKey(e) {
     if (!this.open) return false;
-    const k = e.key;
-    if (e.code === 'KeyQ' || e.code === 'Escape') { this.toggle(false); return true; }
+    const k = e.key, c = e.code;   // 字母鍵用 e.code，中文輸入法下 e.key 會不同
+    if (c === 'KeyQ' || c === 'Escape') { this.toggle(false); return true; }
+    if (e.ctrlKey || e.metaKey || e.altKey) return false;
+    // 鈴聲、震動、亮度：任何手機畫面都能用；切換類忽略長按連發
+    if (c === 'KeyM' || c === 'KeyV') { if (!e.repeat) { if (c === 'KeyM') this.setRinger(!this.ringer); else this.setVibrate(!this.vibrate); } return true; }
+    if (c === 'BracketLeft' || c === 'BracketRight') { this.setBright(this.bright + (c === 'BracketRight' ? 0.1 : -0.1)); return true; }
+    if (this.screen === 'call' && (c === 'KeyX' || c === 'KeyH')) { if (!e.repeat) { if (c === 'KeyX') this.setWhisper(!this.whisper); else this.hangup(true); } return true; }
+    if (this.screen === 'home' && (c === 'Enter' || c === 'NumpadEnter')) { this.setScreen('dialer'); this.num = ''; this.renderNum(); return true; }
     if (this.screen === 'call' && this._choose && /^[1-9]$/.test(k)) { this._choose(+k - 1); return true; }
     if (this.screen === 'incoming') { if (k === '1') { this.reject(); return true; } if (k === '2') { this.answer(); return true; } if (k === '3') { this.quickReply(); return true; } }
     if (this.screen === 'home' && (/^[0-9]$/.test(k))) { this.setScreen('dialer'); this.num = ''; }
     if (this.screen === 'dialer') {
       if (/^[0-9*#]$/.test(k)) { this.press(k); return true; }
-      if (k === 'Backspace') { this.num = this.num.slice(0, -1); this.renderNum(); return true; }
+      if (k === 'Backspace') { if (!this.num) { if (!e.repeat) this.setScreen('home'); } else { this.num = this.num.slice(0, -1); this.renderNum(); } return true; }
       if (k === 'Enter') { this.dial(this.num); return true; }
     }
     return false;
@@ -7621,6 +7655,13 @@ const EVENT_META = {
 };
 const DEC_NAMES = { incident: '事件初期', incident_fab: '事件初期', incident_lobby: '事件初期', blocked: '遇到暴徒', fakeGuard: '門外有人叫門', police: '警方到場' };
 
+// 原本只能滑鼠點的卡片／時間軸列：補上 Tab 聚焦與 Enter／空白鍵觸發
+function kbdAct(el, fn) {
+  el.tabIndex = 0; el.setAttribute('role', 'button');
+  el.addEventListener('keydown', (e) => { if (e.code === 'Enter' || e.code === 'Space') { e.preventDefault(); fn(); } });
+  return el;
+}
+
 class Debrief {
   constructor(g) { this.g = g; this.root = $('#debrief'); this.playing = false; this.speed = 2; this.t = 0; }
   open(summary) {
@@ -7666,12 +7707,13 @@ class Debrief {
         const mine = D.options.find(o => o.id === e.id), right = D.options.find(o => o.correct);
         const state = e.correct ? 'ok' : e.id === 'timeout' ? 'late' : 'bad';
         const rel = e.t - (m.cueT || 0);
-        box.append(h('article', { class: 'db-dec ' + state, onclick: () => { this.t = Math.max(0, e.t - 2); if (this.scrub) this.scrub.value = String(this.t); this.appliedDoor = -1; } },
+        const jump = () => { this.t = Math.max(0, e.t - 2); if (this.scrub) this.scrub.value = String(this.t); this.appliedDoor = -1; };
+        box.append(kbdAct(h('article', { class: 'db-dec ' + state, onclick: jump },
           h('div', { class: 'dh' }, h('span', { class: 'mono', text: (rel < 0 ? '−' : '+') + fmtTime(Math.abs(rel)) }), h('b', { text: DEC_NAMES[e.key] || '決策' }), h('span', { class: 'tag', text: state === 'ok' ? '正確' : state === 'late' ? '來不及回應' : '需改進' })),
           h('p', { class: 'q', text: g.director.fmt(D.prompt) }),
           h('p', { class: 'mine' }, h('span', { text: '你的選擇' }), state === 'late' ? '沒有在時間內做出決定' : (mine ? g.director.fmt(mine.text) : '—')),
           (mine && mine.feedback && state !== 'late') ? h('p', { class: 'fb', text: g.director.fmt(mine.feedback) }) : (state === 'late' && D.timeoutFeedback ? h('p', { class: 'fb', text: g.director.fmt(D.timeoutFeedback) }) : null),
-          (!e.correct && right) ? h('p', { class: 'right' }, h('span', { text: '正確做法' }), g.director.fmt(right.text) + (right.feedback ? '　' + g.director.fmt(right.feedback) : '')) : null));
+          (!e.correct && right) ? h('p', { class: 'right' }, h('span', { text: '正確做法' }), g.director.fmt(right.text) + (right.feedback ? '　' + g.director.fmt(right.feedback) : '')) : null), jump));
       }
       if (box.childElementCount) R.append(h('h2', { class: 'db-h2', text: '決策回顧' }), h('p', { class: 'db-sub', text: '每個關鍵時刻你的選擇與正確做法。點卡片可跳到回放的那一刻。' }), box);
     }
@@ -7701,7 +7743,8 @@ class Debrief {
       if (e.type === 'phoneRing') label = '手機來電（' + (e.ringer ? '鈴聲開' : e.vib ? '震動' : '靜音') + '）';
       if (e.type === 'phoneSetting') label = '手機：' + (e.ringer ? '鈴聲開' : '鈴聲關') + '、' + (e.vib ? '震動開' : '震動關');
       const rel = e.t - cue;
-      tl.append(h('li', { class: 't-' + meta[1], onclick: () => { this.t = e.t; this.scrub.value = String(e.t); this.appliedDoor = -1; } }, h('span', { class: 'mono', text: (rel < 0 ? '−' : '+') + fmtTime(Math.abs(rel)) }), h('span', { text: label })));
+      const seek = () => { this.t = e.t; this.scrub.value = String(e.t); this.appliedDoor = -1; };
+      tl.append(kbdAct(h('li', { class: 't-' + meta[1], onclick: seek }, h('span', { class: 'mono', text: (rel < 0 ? '−' : '+') + fmtTime(Math.abs(rel)) }), h('span', { text: label })), seek));
     }
     R.append(h('h2', { class: 'db-h2', text: '關鍵時間軸' }), h('p', { class: 'db-sub', text: '以「事件發生」為 00:00。點一下可跳到回放畫面。' }), tl);
     // 檢討重點
@@ -7731,6 +7774,7 @@ class Debrief {
     R.append(h('footer', { class: 'db-foot', text: (S.meta.organization || '') + '　・　本演練僅供教育訓練使用' }));
     this.drawMap();
     this.setPlay(true);
+    const first = R.querySelector('.db-actions .btn'); if (first) first.focus({ preventScroll: true });   // 鍵盤使用者從「再挑戰」開始 Tab
   }
   close() { this.root.hidden = true; this.root.innerHTML = ''; this.playing = false; }
   setPlay(on) { this.playing = on; if (this.playBtn) this.playBtn.textContent = on ? '暫停' : '播放'; if (on && this.t >= this.endT - 0.1) this.t = 0; }
@@ -7945,7 +7989,7 @@ function setupAggUI(g) {
 /* ============================================================
  * 18-main：啟動、情境載入、標題畫面、主迴圈
  * ============================================================ */
-const GAME_VERSION = 'v2.4';
+const GAME_VERSION = 'v2.5';
 // 難度：speed 嫌犯速度倍率、decision 決策秒數增減、count 嫌犯人數（0＝依教材機率）、hunt 往玩家附近搜索的機率、ringTwice 躲藏時手機響第二次
 const LEVELS = {
   easy: { zh: '新手', speed: 0.85, decision: 3, count: 1, hunt: 0.4, ringTwice: false, coach: true },
@@ -8020,13 +8064,14 @@ Object.assign(Game.prototype, {
     this.state = 'playing'; this.timeScale = 1; this.fx = {};
     this.input.wantLock = true; this.input.enabled = true; this.expectUnlock = false; this.input.requestLock();
     $('#title').hidden = true; document.body.classList.add('playing');
+    if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur();   // 焦點留在已隱藏的按鈕上，Enter／空白鍵會誤觸
   },
   restart(same) { const o = Object.assign({}, this.lastOpts); if (!same) delete o.seed; else o.seed = this.run.seed; this.newRun(o); },
   toTitle() {
     this.runId = (this.runId || 0) + 1; this.hud.cancelDecision(); if (this.run) this.run.ended = true;
     this.state = 'title'; this.speech.cancel(); this.audio.stopAll(); this.debrief.close(); this.hud.show(false); this.phone.toggle(false);
     $('#fail').hidden = true; $('#pause').hidden = true; $('#title').hidden = false; document.body.classList.remove('playing');
-    this.input.wantLock = false; this.input.exitLock(); this.setupTitleLife();
+    this.input.wantLock = false; this.input.exitLock(); this.setupTitleLife(); $('#t-go').focus({ preventScroll: true });
   },
   async enterDecision(prompt, opts, seconds, key) {
     const rid = this.runId;
@@ -8048,7 +8093,7 @@ Object.assign(Game.prototype, {
       if (this.runId !== rid || this.state !== 'failed') return;
       this.timeScale = 0; const f = $('#fail');
       $('#fail-title').textContent = opt ? '這個選擇讓你陷入危險' : '你被暴徒發現了';
-      $('#fail-lesson').textContent = lesson; f.hidden = false; this.hud.show(false);
+      $('#fail-lesson').textContent = lesson; f.hidden = false; this.hud.show(false); $('#f-retry').focus({ preventScroll: true });
     }, 1700);
   },
   finishRun(outcome) {
@@ -8066,8 +8111,8 @@ Object.assign(Game.prototype, {
     try { const hist = store.get('history', []); hist.unshift({ d: Date.now(), name: this.settings.name, start: this.run.start, mode: this.run.mode, total: summary.total, grade: summary.grade, outcome: this.run.outcome }); store.set('history', hist.slice(0, 20)); } catch (e) { }
   },
   pause(on) {
-    if (on && this.state === 'playing') { this.state = 'paused'; $('#pause').hidden = false; this.speech.pauseAll(); if (this.audio.ok) this.audio.ctx.suspend(); }
-    else if (!on && this.state === 'paused') { this.state = 'playing'; $('#pause').hidden = true; this.speech.resumeAll(); if (this.audio.ok) this.audio.ctx.resume(); this.input.requestLock(true); }
+    if (on && this.state === 'playing') { this.state = 'paused'; $('#pause').hidden = false; $('#p-resume').focus({ preventScroll: true }); this.speech.pauseAll(); if (this.audio.ok) this.audio.ctx.suspend(); }
+    else if (!on && this.state === 'paused') { this.state = 'playing'; $('#pause').hidden = true; if (document.activeElement && document.activeElement !== document.body) document.activeElement.blur(); this.speech.resumeAll(); if (this.audio.ok) this.audio.ctx.resume(); this.input.requestLock(true); }
   },
 
   // ---------- 標題畫面：CCTV 牆上的日常 ----------
@@ -8145,6 +8190,7 @@ async function boot() {
   input.canLock = () => (g.state === 'playing') && !g.phone.open;
   if ('ontouchstart' in window || navigator.maxTouchPoints > 0) { input.setupTouch($('#touch'), { phone: () => { if (g.state === 'playing') g.phone.toggle(); }, pause: () => g.pause(g.state === 'playing') }); document.body.classList.add('touch'); }
   input.onKey = (e) => handleKey(g, e);
+  input.captureKeys = () => g.state === 'playing' || g.state === 'ending';
   input.onLockChange = (locked) => {
     if (locked) { g.expectUnlock = false; $('#clickgate').hidden = true; return; }
     if (g.state === 'playing' && !g.phone.open && !g.expectUnlock && !input.dragMode) g.pause(true);
@@ -8166,7 +8212,7 @@ async function boot() {
     renderer.drawCCTVWall({ x: 0, y: 0, w: 64, h: 36 }, 0);
     const px = new Uint8Array(4); renderer.gl.readPixels(0, 0, 1, 1, renderer.gl.RGBA, renderer.gl.UNSIGNED_BYTE, px);
   } catch (e) { console.warn('warmup', e); }
-  $('#loading').hidden = true; $('#title').hidden = false;
+  $('#loading').hidden = true; $('#title').hidden = false; $('#t-go').focus({ preventScroll: true });
   let last = performance.now(); let slow = 0, fast = 0;
   const perf = { n: 0, t: 0 };
   const loop = (now) => {
@@ -8319,7 +8365,7 @@ function setupTitleUI(g) {
     stack.append(h('div', { class: 't-row ' + cls }, h('div', { class: 't-word' }, h('b', { text: grp.en }), h('span', { text: grp.zh })), h('ul', {}, ...grp.items.map(i => h('li', {}, h('span', { text: i.zh }), h('small', { text: i.en }))))));
   }
   const name = $('#t-name'); name.value = st.name || ''; name.addEventListener('input', () => { st.name = name.value.trim().slice(0, 24); store.set('settings', st); });
-  const chipGroup = (sel, key) => { $$(sel + ' .chip').forEach(b => { b.classList.toggle('on', b.dataset.v === st[key]); b.addEventListener('click', () => { st[key] = b.dataset.v; $$(sel + ' .chip').forEach(x => x.classList.toggle('on', x === b)); store.set('settings', st); g.audio.init(); g.audio.uiBlip('tick'); syncMode(); }); }); };
+  const chipGroup = (sel, key) => { $$(sel + ' .chip').forEach(b => { b.classList.toggle('on', b.dataset.v === st[key]); b.setAttribute('aria-pressed', String(b.dataset.v === st[key])); b.addEventListener('click', () => { st[key] = b.dataset.v; $$(sel + ' .chip').forEach(x => { x.classList.toggle('on', x === b); x.setAttribute('aria-pressed', String(x === b)); }); store.set('settings', st); g.audio.init(); g.audio.uiBlip('tick'); syncMode(); }); }); };
   chipGroup('#t-start', 'start'); chipGroup('#t-mode', 'mode'); chipGroup('#t-level', 'level');
   $$('#t-level .chip').forEach(b => b.addEventListener('click', () => { const lv = LEVELS[st.level] || LEVELS.normal; if (lv.coach != null) { st.coach = lv.coach; $('#t-coach').checked = lv.coach; applySettings(g); } }));
   const syncMode = () => { $('#t-start').classList.toggle('dis', st.mode === 'hide'); };
@@ -8331,10 +8377,21 @@ function setupTitleUI(g) {
   vs(); setTimeout(vs, 800); setTimeout(vs, 2500); g._titleVoiceStatus = vs;
   setupVoiceUI(g); updateVoiceStatus(g); setupAggUI(g);
   // 對話框
-  const openDlg = (id) => { const d = $(id); d.hidden = false; const f = d.querySelector('button, input, select'); if (f) f.focus(); };
-  $$('[data-open]').forEach(b => b.addEventListener('click', () => openDlg(b.dataset.open)));
-  $$('.dlg [data-close]').forEach(b => b.addEventListener('click', () => { b.closest('.dlg').hidden = true; }));
-  $$('.dlg').forEach(d => d.addEventListener('click', (e) => { if (e.target === d) d.hidden = true; }));
+  let dlgOpener = null;   // 關閉時把焦點還給當初按的連結
+  const openDlg = (id, opener) => { const d = $(id); dlgOpener = opener || null; d.hidden = false; const f = d.querySelector('button, input, select'); if (f) f.focus(); };
+  const closeDlg = (d) => { d.hidden = true; if (dlgOpener && dlgOpener.isConnected && dlgOpener.offsetParent !== null) dlgOpener.focus(); dlgOpener = null; };
+  $$('[data-open]').forEach(b => b.addEventListener('click', () => openDlg(b.dataset.open, b)));
+  $$('.dlg [data-close]').forEach(b => b.addEventListener('click', () => closeDlg(b.closest('.dlg'))));
+  $$('.dlg').forEach(d => d.addEventListener('click', (e) => { if (e.target === d) closeDlg(d); }));
+  // 對話框開著時：Esc 關閉、Tab 只在框內循環（背後的標題畫面不該被選到）
+  window.addEventListener('keydown', (e) => {
+    const d = $$('.dlg').find(x => !x.hidden); if (!d) return;
+    if (e.code === 'Escape') { e.preventDefault(); e.stopPropagation(); closeDlg(d); return; }
+    if (e.code !== 'Tab') return;
+    const fs = $$('button, input, select, textarea', d).filter(x => !x.disabled && !x.hidden && x.offsetParent !== null); if (!fs.length) return;
+    const i = fs.indexOf(document.activeElement);
+    if (e.shiftKey ? i <= 0 : i === fs.length - 1) { e.preventDefault(); fs[e.shiftKey ? fs.length - 1 : 0].focus(); }
+  }, true);
   // 設定
   const bind = (id, key, conv, after) => { const el = $(id); if (el.type === 'checkbox') el.checked = !!st[key]; else el.value = st[key]; el.addEventListener('input', () => { st[key] = conv(el.type === 'checkbox' ? el.checked : el.value); applySettings(g); if (after) after(); }); };
   bind('#s-sens', 'sens', Number); bind('#s-fov', 'fov', Number); bind('#s-quality', 'quality', Number, () => { st.qualityAuto = false; store.set('settings', st); }); bind('#s-master', 'master', Number);
