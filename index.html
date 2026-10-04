@@ -158,6 +158,38 @@
    "kind": "other"
   }
  ],
+ "helpPoints": [
+  {
+   "id": "desk",
+   "kind": "desk",
+   "name": "櫃台",
+   "zone": "lobbySecure",
+   "enabled": true,
+   "hint": "向櫃台人員當面回報",
+   "doneText": "已向櫃台當面回報：櫃台人員會立即通知 ERC 並轉報 110。請離開現場，到安全的地方。",
+   "_說明": "求援點：沒有手機或不方便撥號時，可以走到這裡當面回報，效果等同撥通 110（由對方轉報）。kind 只能是 desk（櫃台）／control（中控室對講機）／eyewash（沖淋洗眼器）；zone 只能是 lobbySecure／connector／corridor／fab，desk 只能放 lobbySecure，同一區域只能有一個點。enabled 為 false 時地圖上不會出現、也不能互動。name 會出現在名牌、講評時間軸；hint 是靠近時的提示；doneText 是回報後的文字（不播語音）。這個陣列要整組提供，只提供一筆會蓋掉其他筆。"
+  },
+  {
+   "id": "control",
+   "kind": "control",
+   "name": "中控室",
+   "zone": "connector",
+   "enabled": true,
+   "hint": "按下對講機，直接向中控室回報",
+   "doneText": "已透過對講機向中控室回報：中控室會從監視器追蹤嫌犯並轉報 110。",
+   "_說明": "地圖上沒有中控室，以辦公區出口旁牆上的中控室對講機代表「直接向中控室回報」。"
+  },
+  {
+   "id": "eyewash",
+   "kind": "eyewash",
+   "name": "沖淋洗眼器",
+   "zone": "fab",
+   "enabled": false,
+   "hint": "拉下沖淋洗眼器（感測器會通知 ERC）",
+   "doneText": "沖淋洗眼器已啟動：感測器通知 ERC，ERC 會派人並轉報 110。",
+   "_說明": "預設關閉。此項必須由公司安全權責單位確認可行才可開啟（改成 true），未經核准不得在訓練中教這個做法。"
+  }
+ ],
  "slogan": {
   "run": {
    "en": "RUN",
@@ -346,6 +378,9 @@
   ],
   "objectiveIntro": "到{PRINT_ROOM}拿文件",
   "pickupDoc": "拿到文件了。",
+  "_說明_講評撤離方向": "講評頁（跑／撤離結局）顯示的撤離方向提示，只提示、不扣分。debriefEscapeDirection 是一般提示；debriefEscapeDeep 在學員（非 Fab 起點）實際進入過建築物內部深處（更衣室、無塵衣著裝區、風除室、Fab 無塵室、黃光區，房間 key：locker、gown、airShower、fab、fabYellow）時追加，{ZONES} 會換成經過的區域名稱（取自 setting.rooms）。可改成本廠的集合點與用語。專項「躲＋報」不顯示。",
+  "debriefEscapeDirection": "撤離方向原則：有選擇時，往戶外的指定集合點移動，不要往建築物內部深處（更衣區、無塵室）逃；歹徒緊追在後、只有那條路時，仍以先脫離危險為優先。",
+  "debriefEscapeDeep": "你這次經過了：{ZONES}。這些都是建築物內部深處，下次有選擇時，優先往戶外集合點撤離。",
   "incidentCaption": "［主走廊方向傳來巨響、玻璃碎裂聲和尖叫聲］",
   "coworkerReact": "什麼聲音？是在施工嗎？我過去看一下。",
   "coworkerStopped": "好、好！我跟你走！",
@@ -941,6 +976,12 @@ input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); }
 .h-sub.pa .who { background: var(--accent); color: #062326; } .h-sub.as .who { background: var(--danger); color: #fff; } .h-sub.po .who { background: #3a5bd0; color: #fff; }
 .h-sub.di .who { background: var(--alert); color: #231400; } .h-sub.co .who { background: var(--hide); color: #1d1024; } .h-sub.na { font-style: italic; color: var(--fg-2); } .h-sub.na .who { display: none; }
 .h-sub.muf span { opacity: .75; filter: blur(.3px); }
+.h-map { position: absolute; left: 18px; top: 68px; width: 168px; height: 168px; display: none; border-radius: 12px; overflow: hidden; background: rgba(18, 20, 22, 0.66); border: 1px solid var(--accent, #26A7B0); }
+.h-map.on { display: block; }
+.h-map canvas { display: block; width: 100%; height: 100%; }
+.h-map i { position: absolute; right: 6px; top: 3px; font: 700 11px/1 var(--font-mono, monospace); font-style: normal; color: #cfd8dd; text-shadow: 0 1px 2px #000; }
+body.touch .h-map { display: none !important; }
+@media (max-width: 900px), (max-height: 560px) { .h-map { display: none !important; } }
 .h-vitals { position: absolute; left: 18px; bottom: 18px; width: 250px; padding: 12px 14px; border-radius: 12px; background: rgba(18, 20, 22, 0.66); border: 1px solid var(--line); display: grid; gap: 8px; font-size: 12.5px; }
 .h-vitals .lbl { color: var(--muted); font-size: 12px; min-width: 42px; }
 .v-hr { display: grid; grid-template-columns: auto auto 1fr; align-items: baseline; column-gap: 6px; }
@@ -1158,7 +1199,7 @@ input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); }
 .db-card h3 small { font: 500 12px var(--font-en); color: var(--muted); }
 .db-card .what { margin: 0; color: var(--alert); font-size: 14px; }
 .db-card .tip { margin: 0; color: var(--fg); font-size: 14.5px; }
-.db-card.fail { border-color: var(--danger); } .db-card.good { border-color: var(--run); }
+.db-card.lost { border-color: var(--danger); } .db-card.good { border-color: var(--run); }
 .db-stress { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: var(--gap); align-items: start; }
 .db-hr { width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--line); }
 .db-sl, .db-sop { margin: 0; padding-left: 20px; display: grid; gap: 6px; color: var(--fg-2); font-size: 14.5px; }
@@ -1360,7 +1401,7 @@ window.RHA_VOICES = {"v":1,"made":"2026-10-03","info":{"assailant_52c7ee42":{"wh
           <button class="chip" type="button" data-v="hard" title="沒有提示、嫌犯較快且兩人、決策時間短、手機會再響一次">進階</button>
         </div>
       </div>
-      <label class="switch f-span"><input id="t-coach" type="checkbox"><span class="sw" aria-hidden="true"></span><span>教練模式：顯示目標、提示與躲避檢查清單</span></label>
+      <label class="switch f-span"><input id="t-coach" type="checkbox"><span class="sw" aria-hidden="true"></span><span>教練模式：顯示目標、提示與躲避檢查清單（新手難度含小地圖）</span></label>
       <button id="t-go" class="btn primary big f-span" type="button">開始演練</button>
       <div class="t-links f-span">
         <button class="linkbtn" type="button" data-open="#dlg-help">操作說明</button>
@@ -1386,6 +1427,7 @@ window.RHA_VOICES = {"v":1,"made":"2026-10-03","info":{"assailant_52c7ee42":{"wh
     </div>
     <div id="h-phone" class="h-phone"><kbd>Q</kbd><span>鈴聲</span></div>
   </div>
+  <div id="h-map" class="h-map" aria-hidden="true"><canvas id="h-map-cv"></canvas><i>N</i></div>
   <div id="h-obj" class="h-obj"></div>
   <div id="h-card" class="h-card"></div>
   <div id="h-toast" class="h-toast"></div>
@@ -1411,7 +1453,7 @@ window.RHA_VOICES = {"v":1,"made":"2026-10-03","info":{"assailant_52c7ee42":{"wh
     <span class="bt"></span>
   </div>
   <div id="h-check" class="h-check" hidden></div>
-  <div id="h-keys" class="h-keys"><kbd>WASD</kbd>移動 <kbd>方向鍵</kbd>轉視角 <kbd>Shift</kbd>快跑 <kbd>C</kbd>蹲下 <kbd>E</kbd>互動／長按上鎖 <kbd>Q</kbd>手機（開著時 <kbd>M</kbd>鈴聲 <kbd>V</kbd>震動 <kbd>[ ]</kbd>亮度 <kbd>H</kbd>掛斷） <kbd>空白</kbd>呼吸調節 <kbd>Esc</kbd>暫停</div>
+  <div id="h-keys" class="h-keys"><kbd>WASD</kbd>移動 <kbd>方向鍵</kbd>轉視角 <kbd>Shift</kbd>快跑 <kbd>C</kbd>蹲下 <kbd>E</kbd>互動／長按上鎖 <kbd>Q</kbd>手機（按鍵提示在手機畫面） <kbd>空白</kbd>呼吸調節 <kbd>Esc</kbd>暫停</div>
   <div id="h-fade" class="h-fade"></div>
 </div>
 <div id="touch" class="touch"></div>
@@ -1439,7 +1481,7 @@ window.RHA_VOICES = {"v":1,"made":"2026-10-03","info":{"assailant_52c7ee42":{"wh
   <div class="ps-inner" role="dialog" aria-modal="true" aria-labelledby="ps-h">
     <h2 id="ps-h">暫停</h2>
     <div class="ps-btns"><button id="p-resume" class="btn primary" type="button">繼續演練</button><button id="p-restart" class="btn" type="button">重新開始</button><button id="p-title" class="btn ghost" type="button">回主選單</button></div>
-    <div class="ps-keys"><kbd>WASD</kbd>移動　<kbd>方向鍵</kbd>轉視角　<kbd>Shift</kbd>快跑　<kbd>C</kbd>蹲下　<kbd>E</kbd>互動（長按：上鎖／堵門）　<kbd>Q</kbd>手機　<kbd>空白鍵</kbd>方塊呼吸　手機開著：<kbd>M</kbd>鈴聲　<kbd>V</kbd>震動　<kbd>[</kbd><kbd>]</kbd>亮度　<kbd>H</kbd>掛斷　選單：<kbd>Tab</kbd>切換　<kbd>Enter</kbd>確認　<kbd>Esc</kbd>繼續</div>
+    <div class="ps-keys"><kbd>WASD</kbd>移動　<kbd>方向鍵</kbd>轉視角　<kbd>Shift</kbd>快跑　<kbd>C</kbd>蹲下　<kbd>E</kbd>互動（長按：上鎖／堵門）　<kbd>Q</kbd>手機（按鍵提示在手機畫面）　<kbd>空白鍵</kbd>方塊呼吸　選單：<kbd>Tab</kbd>切換　<kbd>Enter</kbd>確認　<kbd>Esc</kbd>繼續</div>
   </div>
 </div>
 <div id="clickgate" class="clickgate" hidden><span>點一下畫面繼續</span></div>
@@ -1452,21 +1494,14 @@ window.RHA_VOICES = {"v":1,"made":"2026-10-03","info":{"assailant_52c7ee42":{"wh
   <div class="dlg-box" role="dialog" aria-modal="true" aria-labelledby="dh-h">
     <h2 id="dh-h">操作說明</h2>
     <dl class="keys">
-      <dt><kbd>W A S D</kbd></dt><dd>移動</dd>
-      <dt><kbd>← → ↑ ↓</kbd></dt><dd>轉動視角（左右轉向、上下抬頭低頭），不用滑鼠也能玩</dd>
-      <dt>滑鼠</dt><dd>轉動視角（可與方向鍵並用）。點一下畫面鎖定滑鼠，若無法鎖定可按住左鍵拖曳</dd>
-      <dt><kbd>Shift</kbd></dt><dd>快跑（腳步聲很大）</dd>
-      <dt><kbd>C</kbd></dt><dd>蹲下／站起（比較安靜，也比較不容易被看見）</dd>
-      <dt><kbd>E</kbd></dt><dd>開關門、關燈、互動；在房間內<b>長按</b>可以上鎖、推櫃子堵門</dd>
-      <dt><kbd>Q</kbd></dt><dd>拿出／收起手機：切換鈴聲與震動、調亮度、撥打 110（手機開著時仍可用 WASD 移動）</dd>
-      <dt><kbd>M</kbd> <kbd>V</kbd> <kbd>[</kbd> <kbd>]</kbd></dt><dd>手機開著時：M 鈴聲開／靜音、V 震動開／關、[ 亮度降、] 亮度升</dd>
-      <dt><kbd>Enter</kbd></dt><dd>手機主畫面進入撥號；撥號時輸入數字（<kbd>Backspace</kbd> 刪除，沒號碼時再按＝返回），<kbd>Enter</kbd> 撥出</dd>
-      <dt><kbd>1</kbd> <kbd>2</kbd> <kbd>3</kbd></dt><dd>來電時：1 拒接、2 接聽、3 傳訊息</dd>
-      <dt><kbd>X</kbd> <kbd>H</kbd></dt><dd>通話中：X 切換小聲說話、H 掛斷</dd>
+      <dt><kbd>W A S D</kbd> <kbd>← → ↑ ↓</kbd></dt><dd>WASD 移動、方向鍵轉動視角（左右轉向、上下抬頭低頭）。滑鼠也能轉視角：點一下畫面鎖定，無法鎖定時按住左鍵拖曳。不用滑鼠也能玩</dd>
+      <dt><kbd>Shift</kbd> <kbd>C</kbd></dt><dd>Shift 快跑（腳步聲很大）、C 蹲下／站起（比較安靜，也比較不容易被看見）</dd>
+      <dt><kbd>E</kbd></dt><dd>互動：開關門、關燈、拿東西；在房間內<b>長按</b>可以上鎖、推櫃子堵門</dd>
+      <dt><kbd>Q</kbd></dt><dd>拿出／收起手機，撥 110、調鈴聲與亮度（按鍵提示在手機畫面下方；手機開著時仍可用 WASD 移動）</dd>
       <dt><kbd>空白鍵</kbd></dt><dd>方塊呼吸：跟著畫面提示吸氣、屏息、吐氣，可以讓心跳慢下來</dd>
       <dt><kbd>1–4</kbd></dt><dd>決策時刻或通話時選擇回答</dd>
       <dt><kbd>Esc</kbd></dt><dd>暫停（手機開著時先收起手機；視窗開著時關閉視窗）</dd>
-      <dt><kbd>Tab</kbd></dt><dd>選單、對話框、講評頁：Tab／Shift+Tab 切換按鈕，Enter 或空白鍵確認。全程不用滑鼠也能玩</dd>
+      <dt><kbd>Tab</kbd> <kbd>Enter</kbd></dt><dd>選單、對話框、講評頁：Tab／Shift+Tab 切換按鈕，Enter 或空白鍵確認</dd>
     </dl>
     <p class="dlg-note">左下角的心跳、音量、可見度會即時反映你的狀態：跑步、講話、手機響都會讓暴徒聽到；燈光越亮、越多地方看得到你，可見度就越高。</p>
     <div class="dlg-foot"><button class="btn primary" type="button" data-close>知道了</button></div>
@@ -1711,6 +1746,7 @@ const TILE_DEFS = {
   'x': { kind: 'furn', move: 1, sight: 1.3, light: 0 },
   's': { kind: 'furn', move: 1, sight: 0.85, light: 0 },
   'p': { kind: 'furn', move: 1, sight: 1.1, light: 0 },
+  'J': { kind: 'furn', move: 1, sight: 1.1, light: 0 },  // 求援點櫃台（只在教材啟用時才放）
 };
 
 function buildLayout() {
@@ -1914,6 +1950,39 @@ const START_DEFS = {
   lobby: { x: 57.5, z: 55.5, yaw: 1.05, zone: 'lobbyPublic', suit: false },
 };
 
+// 求援點（教材 helpPoints）可擺放的位置：每個區域一個已確認不擋路的牆邊位置。
+// x,z＝靠牆的那一格；nx,nz＝面向房間的方向；len＝沿牆幾格；desk＝空間夠放會擋路的櫃台。
+const HELP_SPOTS = {
+  lobbySecure: { x: 50, z: 42, nx: 1, nz: 0, len: 2, desk: true },  // 大廳門禁區西牆，主走廊進大廳處北側
+  connector: { x: 33, z: 36, nx: -1, nz: 0, len: 1 },              // 連通走道東牆，正對辦公區出口
+  corridor: { x: 16, z: 49, nx: 0, nz: -1, len: 1 },               // 1 樓主走廊南牆
+  fab: { x: 42, z: 9, nx: 1, nz: 0, len: 1 },                      // Fab 黃光區東邊那排 bay 的牆邊
+};
+const HELP_KINDS = ['desk', 'control', 'eyewash'];
+// 依教材挑出啟用、且位置合法的求援點，並算出互動點座標
+function resolveHelpPoints(S) {
+  const out = [], issues = [], used = new Set();
+  const list = Array.isArray(S.helpPoints) ? S.helpPoints : [];
+  list.forEach((hp, i) => {
+    if (!hp || hp.enabled !== true) return;
+    const tag = 'helpPoints[' + i + ']（' + (hp.name || hp.id || '') + '）';
+    const sp = HELP_SPOTS[hp.zone];
+    if (!HELP_KINDS.includes(hp.kind)) { issues.push(tag + ' 的 kind 必須是 ' + HELP_KINDS.join('／') + '，已略過'); return; }
+    if (!sp) { issues.push(tag + ' 的 zone 只能是 ' + Object.keys(HELP_SPOTS).join('／') + '，已略過'); return; }
+    if (hp.kind === 'desk' && !sp.desk) { issues.push(tag + ' 櫃台只能放在 ' + Object.keys(HELP_SPOTS).filter(k => HELP_SPOTS[k].desk).join('／') + '，已略過'); return; }
+    if (used.has(hp.zone)) { issues.push(tag + ' 與其他求援點同區域，已略過'); return; }
+    used.add(hp.zone);
+    // 牆面座標（f）與沿牆中心（c）
+    const fx = sp.nx === 1 ? sp.x : sp.nx === -1 ? sp.x + 1 : null, fz = sp.nz === 1 ? sp.z : sp.nz === -1 ? sp.z + 1 : null;
+    const cx = fx != null ? fx : sp.x + sp.len / 2, cz = fz != null ? fz : sp.z + sp.len / 2;
+    const depth = hp.kind === 'desk' ? 0.95 : hp.kind === 'eyewash' ? 0.3 : 0.1;
+    const ay = hp.kind === 'desk' ? 1.0 : hp.kind === 'eyewash' ? 1.15 : 1.35;
+    out.push({ id: String(hp.id || hp.kind + i), kind: hp.kind, name: hp.name || '', hint: hp.hint || '', doneText: hp.doneText || '', zone: hp.zone, spot: sp,
+      cx, cz, ax: cx + sp.nx * depth, ay, az: cz + sp.nz * depth });
+  });
+  return { list: out, issues };
+}
+
 /* ---------------- 地圖執行期物件 ---------------- */
 class World {
   constructor() {
@@ -1923,7 +1992,7 @@ class World {
     this.zone = L.zones;
     this.doorSpec = L.doorSpec; this.tools = L.tools;
     this.doors = []; this.doorAt = new Map();
-    this.movables = [];
+    this.movables = []; this.helpPoints = [];
     this._buildDoors();
     this.lightMaskVersion = 0;
   }
@@ -1977,6 +2046,15 @@ class World {
       }
     }
     for (let z = 0; z < this.H; z++) for (let x = 0; x < this.W; x++) if (this.ch(x, z) === 'M') this.movables.push({ x, z, ox: x, oz: z, px: x + 0.5, pz: z + 0.5, moving: 0, placed: false, door: null });
+  }
+  // 放入啟用的求援點：櫃台佔格（擋路），牆上的對講面板與洗眼器不佔格
+  setHelpPoints(list) {
+    this.helpPoints = list;
+    for (const hp of list) {
+      if (hp.kind !== 'desk') continue;
+      const sp = hp.spot, ax = sp.nz !== 0 ? 1 : 0, az = sp.nx !== 0 ? 1 : 0;
+      for (let i = 0; i < sp.len; i++) this.chars[(sp.z + az * i) * this.W + sp.x + ax * i] = 'J';
+    }
   }
   door(x, z) { return this.doorAt.get(x + ',' + z) || null; }
   doorClosed(d) { return d.open < 0.35; }
@@ -2346,6 +2424,17 @@ function buildAtlas(S, world) {
         c.fillStyle = '#B0B0B0'; c.fillRect(226, 34, 3, hh - 68); c.fillStyle = '#1A1A1A';
         fit(c, name, 260, 64, FONT_ZH, 700); c.fillText(name, 250, hh / 2 + 2);
       } else { fit(c, name, 440, 70, FONT_ZH, 700); c.fillText(name, 44, hh / 2 + 2); }
+    });
+  }
+
+  // ---- 求援點名牌（只畫教材啟用的；名稱來自教材） ----
+  const HELP_COL = { desk: '#26A7B0', control: '#F39C12', eyewash: '#6FCF97' };
+  for (const hp of world.helpPoints || []) {
+    alloc('help:' + hp.id, 512, 160, (c, w, hh) => {
+      c.fillStyle = hp.kind === 'eyewash' ? '#1E7A46' : '#EEF1F4'; c.fillRect(0, 0, w, hh);
+      c.fillStyle = HELP_COL[hp.kind] || '#26A7B0'; c.fillRect(0, 0, 18, hh);
+      c.fillStyle = hp.kind === 'eyewash' ? '#FFFFFF' : '#1A1A1A'; c.textBaseline = 'middle';
+      fit(c, hp.name, 440, 70, FONT_ZH, 700); c.fillText(hp.name, 44, hh / 2 + 2);
     });
   }
 
@@ -3660,6 +3749,11 @@ function buildStaticGeometry(world, atlas, S, lights, rng) {
     mb.box(x - 0.12, y - 0.02, z - 0.12, x + 0.12, y + 0.1, z + 0.12, [0.9, 0.9, 0.9], 30);
     mb.box(x - 0.08, y - 0.12, z - 0.08, x + 0.08, y, z + 0.08, [0.08, 0.08, 0.1], 32);
   }
+  for (const hp of world.helpPoints || []) {
+    const sp = hp.spot, ax = sp.nz !== 0 ? 1 : 0, az = sp.nx !== 0 ? 1 : 0;
+    for (let i = -1; i <= sp.len; i++) reserved.add((sp.x - sp.nx + ax * i) + ',' + (sp.z - sp.nz + az * i));   // 牆上不再掛消防栓等
+    helpPointGeom(mb, hp, R);
+  }
   addProps(mb, world, R, lights, reserved, rng);
   // 風除室噴嘴
   for (let zz = 23.3; zz < 25.9; zz += 0.45) for (const yy of [0.9, 1.4, 1.9]) { mb.box(37.0, yy, zz, 37.025, yy + 0.035, zz + 0.035, [0.35, 0.36, 0.4], 32); mb.box(38.975, yy, zz, 39.0, yy + 0.035, zz + 0.035, [0.35, 0.36, 0.4], 32); }
@@ -3821,6 +3915,38 @@ function counter(mb, world, x, z, rng) {
   if (x === 7) { mb.box(x + 0.3, 0.9, z0 + 0.1, x + 0.7, 1.3, z0 + 0.45, [0.15, 0.15, 0.16], 32); mb.quad([x + 0.42, 1.2, z0 + 0.09], [x + 0.58, 1.2, z0 + 0.09], [x + 0.58, 1.26, z0 + 0.09], [x + 0.42, 1.26, z0 + 0.09], [0, 0, -1], [0.4, 0.9, 1], 40); }
   if (x === 9) mb.box(x + 0.2, 0.84, z0 + 0.15, x + 0.8, 0.9, z0 + 0.5, [0.7, 0.72, 0.75], 32);
   void rng;
+}
+
+// 求援點外觀（靜態幾何，只在開場建一次）：櫃台＝矮桌台、中控室＝牆上對講面板、洗眼器＝牆邊黃綠色立架
+function helpPointGeom(mb, hp, R) {
+  const sp = hp.spot, nx = sp.nx, nz = sp.nz, ux = nz !== 0 ? 1 : 0, uz = nx !== 0 ? 1 : 0;   // u＝沿牆方向
+  const half = sp.len / 2;
+  // 以牆面中心為原點：a＝離牆距離、b＝沿牆偏移，換成世界座標的盒子
+  const bx = (a0, a1, b0, b1, y0, y1, col, mat) => {
+    const xs = [hp.cx + nx * a0 + ux * b0, hp.cx + nx * a1 + ux * b1], zs = [hp.cz + nz * a0 + uz * b0, hp.cz + nz * a1 + uz * b1];
+    mb.box(Math.min(...xs), y0, Math.min(...zs), Math.max(...xs), y1, Math.max(...zs), col, mat);
+  };
+  const plate = (a, y, w, h, glow) => { if (R['help:' + hp.id]) mb.plate(hp.cx + nx * a, y, hp.cz + nz * a, nx, nz, w, h, R['help:' + hp.id], glow); };
+  if (hp.kind === 'desk') {
+    bx(0.05, 0.85, -half + 0.08, half - 0.08, 0, 1.0, [0.2, 0.42, 0.45], 30);          // 櫃身（主色調暗）
+    bx(0.02, 0.92, -half + 0.04, half - 0.04, 1.0, 1.05, [0.85, 0.83, 0.78], 32);      // 檯面
+    bx(0.85, 0.86, -half + 0.1, half - 0.1, 0.35, 0.5, [0.15, 0.65, 0.69], 40);        // 正面亮條
+    plate(0.01, 1.7, 1.1, 0.34, 0.08);
+  } else if (hp.kind === 'control') {
+    bx(0, 0.06, -0.17, 0.17, 1.12, 1.6, [0.2, 0.21, 0.23], 32);                        // 面板
+    bx(0.06, 0.065, -0.11, 0.11, 1.42, 1.54, [0.15, 0.6, 0.65], 40);                   // 螢幕
+    bx(0.06, 0.08, -0.04, 0.04, 1.24, 1.32, [0.95, 0.6, 0.1], 40);                     // 通話鍵
+    plate(0.01, 1.85, 0.62, 0.2, 0.06);
+  } else if (hp.kind === 'eyewash') {
+    const yg = [0.62, 0.82, 0.12];
+    bx(0.02, 0.3, -0.2, 0.2, 0, 0.03, [0.3, 0.32, 0.34], 32);                          // 底座
+    bx(0.12, 0.18, -0.03, 0.03, 0, 2.2, yg, 32);                                       // 立管
+    bx(0.12, 0.42, -0.03, 0.03, 2.14, 2.2, yg, 32);                                    // 上方噴頭臂
+    bx(0.3, 0.5, -0.12, 0.12, 2.06, 2.14, yg, 32);                                     // 噴頭
+    bx(0.12, 0.42, -0.18, 0.18, 0.98, 1.06, yg, 32);                                   // 洗眼盆
+    bx(0.4, 0.42, -0.02, 0.02, 1.5, 1.95, [0.25, 0.6, 0.15], 32);                      // 拉桿
+    plate(0.01, 2.45, 0.62, 0.2, 0.1);
+  }
 }
 
 function guardCounter(mb, world, x, z) {
@@ -5373,7 +5499,7 @@ function voiceId(who, text) {
 // 列出遊戲會說出口的每一句（依目前教材內容；隨機武器會展開成多句）
 function collectVoiceLines(S) {
   const fake = { g: { S, run: {}, player: { zone: 'office' } } };
-  fake.roomFull = Director.prototype.roomFull.bind(fake); fake.tok = Director.prototype.tok.bind(fake);
+  fake.roomFull = Director.prototype.roomFull.bind(fake); fake.tok = Director.prototype.tok.bind(fake); fake.headCount = Director.prototype.headCount.bind(fake);
   const fmt = (t, extra) => Director.prototype.fmt.call(fake, t, extra);
   const out = [], seen = new Set(); let order = 0;
   const add = (who, text, key, src) => {
@@ -6194,6 +6320,7 @@ class Game {
     for (const m of w.movables) if (!m.placed) add(m.px, 1.0, m.pz, { type: 'movable', m }, 2.5);
     for (const c of this.civilians) if (c.interact && c.visible) add(c.x, 1.3 - c.crouch * 0.5, c.z, { type: 'npc', npc: c }, 2.6);
     for (const it of this.run.items) if (!it.done) add(it.x, it.y, it.z, { type: 'item', item: it }, it.r || 2.0);
+    for (const hp of w.helpPoints) add(hp.ax, hp.ay, hp.az, { type: 'help', hp }, 1.65);   // 求援點：水平約 1.5 公尺內
     if (p.zone === 'airShower' || (Math.abs(p.x - 37.5) < 2 && Math.abs(p.z - 24.5) < 3.5)) { add(38.95, 1.4, 24.5, { type: 'airbtn' }, 1.8); add(36.9, 1.4, 26.95, { type: 'airbtn' }, 1.8); add(36.9, 1.4, 22.05, { type: 'airbtn' }, 1.8); }
     cands.sort((a, b) => a.score - b.score);
     return cands[0] || null;
@@ -6217,6 +6344,7 @@ class Game {
     if (t.type === 'npc') return { tap: t.npc.prompt || '說話' };
     if (t.type === 'item') return { tap: t.item.label, holdLabel: t.item.holdLabel, hold: t.item.hold || 0 };
     if (t.type === 'airbtn') return { tap: '（緊急開門按鈕）', holdLabel: '緊急開門', hold: 0.8 };
+    if (t.type === 'help') return { tap: this.run.helpReport ? '（' + this.director.fmt(t.hp.name) + '：已回報）' : this.director.fmt(t.hp.hint) };
     void S; return null;
   }
   movableDoor(m) {
@@ -6242,6 +6370,7 @@ class Game {
     if (t.type === 'switch') { this.toggleRoomLight(t.door.room); return; }
     if (t.type === 'npc' && t.npc.onTalk) { t.npc.onTalk(t.npc); return; }
     if (t.type === 'item' && t.item.onTap) { t.item.onTap(t.item); return; }
+    if (t.type === 'help') { this.director.onHelpPoint(t.hp); return; }
   }
   doHold(t) {
     const p = this.player;
@@ -6544,6 +6673,8 @@ class Director {
   }
 
   /* ---------- 文字代換 ---------- */
+  // 報案時「這裡有幾人」：同事進房一起躲（hideCount）或帶著同事一起撤離（coworkerWith）都算 2 人
+  headCount() { const r = this.g.run || {}; return Math.max(r.hideCount || 1, r.coworkerWith ? 2 : 1); }
   roomFull(zk) { const r = this.g.S.setting.rooms[zk]; if (!r) return zk; return (r.code ? r.code + ' ' : '') + r.name; }
   tok(extra = {}) {
     const g = this.g, S = g.S, st = S.setting, run = g.run || {}; const tr = run.truth || {};
@@ -6554,7 +6685,7 @@ class Director {
       COWORKER: S.people.coworker, MANAGER: S.people.manager, CONTROL: S.people.controlRoom,
       WEAPON: tr.weapon ? tr.weapon.zh : '刀械', CLOTHES: tr.top ? tr.top.zh : '深色衣物', PANTS: tr.pants ? tr.pants.zh : '', HEADWEAR: tr.head ? tr.head.zh : '',
       COUNT_TEXT: cnt === 2 ? '兩名男子' : '一名男子', PRINT_ROOM: this.roomFull('print'),
-      ROOM_FULL: this.roomFull(g.player.zone), EXIT_NAME: run.exitName || '', HIDE_COUNT: String(run.hideCount || 1),
+      ROOM_FULL: this.roomFull(g.player.zone), EXIT_NAME: run.exitName || '', HIDE_COUNT: String(this.headCount()),
       LAST_SEEN: run.obs && run.obs.lastZone ? this.roomFull(run.obs.lastZone) : '',
       TOOL: 'PHOTO-5',
     };
@@ -6926,6 +7057,15 @@ class Director {
     if (g.player.escaped) return;
     this.at(g.S.tuning.policeDelayAfterCall, () => { if (!run.policeArrived && !run.ended) this.policeArrive('call'); });
   }
+  // 就地回報（櫃台、中控室對講機…）：由對方轉報 110，效果等同撥通 110 的警方出動；不含報案問答，只用文字不播語音
+  onHelpPoint(hp) {
+    const g = this.g, run = g.run; if (run.ended) return;
+    if (run.helpReport) { g.hud.toast('已經回報過了', 1.4); return; }
+    run.helpReport = { id: hp.id, kind: hp.kind, name: this.fmt(hp.name), t: run.t };
+    g.metrics.helpReport(run.helpReport);
+    g.audio.uiBlip('ok'); g.hud.toast(this.fmt(hp.doneText), 4);
+    this.onPoliceCalled(); run.phaseAlert = true;
+  }
   policeArrive(why) {
     const g = this.g, run = g.run, S = g.S; if (run.policeArrived || run.ended) return; run.policeArrived = true; run.policeT = run.t;
     g.metrics.event('police', { why });
@@ -7020,7 +7160,7 @@ class Director {
         break;
       }
       case 'self': {
-        const n = run.hideCount || 1; const d = g.player.roomDoor;
+        const n = this.headCount(); const d = g.player.roomDoor;
         if (escaped) add(T.selfEscaped, 1);
         else if (d && g.player.room && (d.locked || d.barricaded)) add(T.selfHidden, 1);
         else add(T.selfHiddenOpen, 0.85);
@@ -7335,7 +7475,7 @@ class HUD {
       prompt: $('#h-prompt'), promptKey: $('#h-prompt .k'), promptTxt: $('#h-prompt .t'), holdRing: $('#h-hold circle.p'), holdTxt: $('#h-prompt .ht'),
       hr: $('#h-hr'), ecg: $('#h-ecg'), noise: $$('#h-noise i'), vis: $('#h-visbar i'), visTxt: $('#h-vistxt'), cover: $('#h-cover'),
       ring: $('#h-ring'), phoneInd: $('#h-phone'), aware: $$('.h-aware'), breath: $('#h-breath'), breathDot: $('#h-breath .dot'), breathTxt: $('#h-breath .bt'),
-      check: $('#h-check'), cross: $('#h-cross'), fade: $('#h-fade'), hint: $('#h-keys'),
+      map: $('#h-map'), mapCv: $('#h-map-cv'), check: $('#h-check'), cross: $('#h-cross'), fade: $('#h-fade'), hint: $('#h-keys'),
     };
     this.ecgCtx = this.el.ecg.getContext('2d'); this.ecgT = 0; this.ecgBuf = new Float32Array(120); this.ecgI = 0;
     this.toastT = 0; this.capT = 0; this.cardT = 0; this.subT = 0;
@@ -7443,6 +7583,82 @@ class HUD {
 
 'use strict';
 /* ============================================================
+ * 15b-minimap：小地圖（只在「新手難度＋教練模式」的完整演練顯示）
+ * 北在上方固定。底圖開局畫一次到離屏 canvas，每幀只做一次 drawImage 裁切＋畫玩家箭頭。
+ * 只讀地圖格子、門、求援點與玩家位置；完全不碰 actors／assailants／civilians（嫌犯與路人位置不能洩漏）。
+ * ============================================================ */
+const MM = { CSS: 168, R: 20, S: 5 };   // 畫面邊長（CSS px）、玩家周圍顯示幾格、底圖每格像素
+
+Object.assign(HUD.prototype, {
+  // 建立底圖（同一個 world、同一組求援點只畫一次）
+  mapBase(world) {
+    if (this._mmWorld === world && this._mmHelp === world.helpPoints) return;
+    const S = MM.S, PAD = MM.R, W = world.W, H = world.H;
+    const cv = this._mmBase || (this._mmBase = document.createElement('canvas'));
+    cv.width = (W + PAD * 2) * S; cv.height = (H + PAD * 2) * S;
+    const c = cv.getContext('2d');
+    c.fillStyle = '#0d1012'; c.fillRect(0, 0, cv.width, cv.height);
+    const kind = (x, z) => world.inb(x, z) ? world.def(x, z) : null;
+    const solid = (x, z) => { const d = kind(x, z); return !d || d.kind === 'wall'; };
+    const px = (x) => (x + PAD) * S;
+    // 地板與家具（戶外背景 U 留空）
+    for (let z = 0; z < H; z++) for (let x = 0; x < W; x++) {
+      const d = world.def(x, z); if (d.kind === 'wall') continue;
+      c.fillStyle = d.kind === 'furn' ? '#39434b' : '#232b31';
+      c.fillRect(px(x), px(z), S, S);
+    }
+    // 牆：只畫貼著可走區域的那一層，輪廓才清楚
+    c.fillStyle = '#8c98a1';
+    for (let z = 0; z < H; z++) for (let x = 0; x < W; x++) {
+      if (!solid(x, z) || world.def(x, z).outdoor) continue;
+      let edge = false;
+      for (let dz = -1; dz <= 1 && !edge; dz++) for (let dx = -1; dx <= 1; dx++) { if ((dx || dz) && !solid(x + dx, z + dz)) { edge = true; break; } }
+      if (edge) c.fillRect(px(x), px(z), S, S);
+    }
+    // 玻璃與門
+    for (let z = 0; z < H; z++) for (let x = 0; x < W; x++) {
+      const d = world.def(x, z);
+      if (d.kind === 'glass') { c.fillStyle = '#4fa9b3'; c.fillRect(px(x), px(z), S, S); }
+      else if (d.kind === 'door') {
+        const dr = world.door(x, z);
+        if (dr && dr.type === 'exit') { c.fillStyle = '#6FCF97'; c.fillRect(px(x) - 1, px(z) - 1, S + 2, S + 2); }
+        else { c.fillStyle = '#F39C12'; c.fillRect(px(x), px(z), S, S); }
+      }
+    }
+    // 已啟用的求援點
+    for (const hp of world.helpPoints) {
+      const x = px(hp.cx + hp.spot.nx * 0.6), y = px(hp.cz + hp.spot.nz * 0.6);
+      c.fillStyle = '#0d1012'; c.beginPath(); c.arc(x, y, 4.6, 0, 6.2832); c.fill();
+      c.fillStyle = '#6FFFE9'; c.beginPath(); c.arc(x, y, 3.4, 0, 6.2832); c.fill();
+      c.fillStyle = '#0d1012'; c.fillRect(x - 0.6, y - 2.2, 1.2, 4.4); c.fillRect(x - 2.2, y - 0.6, 4.4, 1.2);
+    }
+    this._mmWorld = world; this._mmHelp = world.helpPoints;
+  },
+  // 每幀：on＝是否該顯示；隱藏時只切換 class、完全不畫
+  minimap(on, p) {
+    const box = this.el.map;
+    if (on !== this._mmOn) { this._mmOn = on; box.classList.toggle('on', on); }
+    if (!on || !this._mmBase) return;
+    const cv = this.el.mapCv;
+    if (!this._mmCtx) {
+      const dpr = Math.min(2, window.devicePixelRatio || 1);
+      cv.width = cv.height = Math.round(MM.CSS * dpr); this._mmCtx = cv.getContext('2d');
+    }
+    const c = this._mmCtx, N = cv.width, S = MM.S, R = MM.R;
+    const sx = (p.x - R + R) * S, sy = (p.z - R + R) * S;   // 底圖有 R 格留白，所以座標 = (位置 - R) + R
+    c.setTransform(1, 0, 0, 1, 0, 0);
+    c.drawImage(this._mmBase, sx, sy, R * 2 * S, R * 2 * S, 0, 0, N, N);
+    // 玩家箭頭（朝上＝北；yaw 0 朝北，順時針增加）
+    const k = N / 168, cs = Math.cos(p.yaw) * k, sn = Math.sin(p.yaw) * k;
+    c.setTransform(cs, sn, -sn, cs, N / 2, N / 2);
+    c.beginPath(); c.moveTo(0, -8); c.lineTo(5.5, 6); c.lineTo(0, 3); c.lineTo(-5.5, 6); c.closePath();
+    c.fillStyle = '#ffffff'; c.fill(); c.lineWidth = 1.6; c.strokeStyle = '#26A7B0'; c.stroke();
+    c.setTransform(1, 0, 0, 1, 0, 0);
+  },
+});
+
+'use strict';
+/* ============================================================
  * 16-score：行為紀錄與評分
  * ============================================================ */
 class Metrics {
@@ -7456,8 +7672,10 @@ class Metrics {
       phoneRang: false, ringAt: null, ringSetting: null, ringHandled: null, ringHow: null, silentBefore: false, silencedT: null, brightDark: 0,
       noiseHide: 0, noiseHideCount: 0, breathGood: 0, heardPlayerHide: 0,
       dialed: [], call110T: null, call119: false, callControl: false, answers: [], reportDone: false,
+      helpReport: null,   // 就地回報（求援點）：{ t, id, kind, name }，講評可忽略
       obs: { seen: false, count: 0, ids: {}, clothes: false, weapon: false, lastZone: null, lastT: 0 },
       phoneOpened: false, rangLoud: false,
+      zoneT: {},   // 各區域累計停留秒數（講評判斷是否進過建築物深處）
     };
     this.frameT = 0; this.lastDoor = new Map();
   }
@@ -7483,12 +7701,14 @@ class Metrics {
   phoneStop(how) { if (this.m.ringHandled == null) { this.m.ringHandled = this.t; this.m.ringHow = how; } this.event('phoneStop', { how }); }
   dial(n, kind) { this.m.dialed.push({ t: this.t, n, kind }); this.event('dial', { n, kind }); }
   connected110() { if (this.m.call110T == null) this.m.call110T = this.t; }
+  helpReport(r) { if (this.m.helpReport) return; this.m.helpReport = { t: r.t, id: r.id, kind: r.kind, name: r.name }; this.event('helpPointReport', { id: r.id, kind: r.kind, name: r.name }); }
   reportAsk() { }
   reportAnswer(q, ch) { this.m.answers.push({ id: q.id, text: ch.text, score: ch.score, why: ch.why || null }); }
 
   // 每幀取樣
   sample(dt) {
     const g = this.g, p = g.player, r = g.run, m = this.m; if (!r || r.ended) return;
+    if (p.zone) m.zoneT[p.zone] = (m.zoneT[p.zone] || 0) + dt;
     // 撤離反應
     if (r.incident && m.cueT != null && r.t >= m.cueT && !p.escaped) {
       if (m.reactionT == null) {
@@ -7612,12 +7832,16 @@ function scoreRun(g) {
   } else { res.stayQuiet = null; notes.stayQuiet = ['本次沒有進入躲藏階段']; }
   // 7 報警
   {
-    const n = []; let s = 0;
-    if (m.call110T != null) {
+    const n = []; let s = 0; const hp = m.helpReport;
+    // 就地回報（求援點）與撥通 110 都算報警，取較早的那次計時
+    const repT = m.call110T != null && hp ? Math.min(m.call110T, hp.t) : m.call110T != null ? m.call110T : hp ? hp.t : null;
+    if (repT != null) {
       s = 100; const safeT = escaped ? r.escapedT : m.hideStartT;
-      if (safeT != null && m.call110T < safeT) { s -= 15; n.push('還在移動中就先打電話，應先確保安全'); }
-      const delay = safeT != null ? m.call110T - safeT : null; if (delay != null && delay > 30) { s -= Math.min(30, (delay - 30) / 3); n.push(`安全後 ${delay.toFixed(0)} 秒才報警`); }
-      n.push('有撥打 110');
+      // 走到求援點當面回報本來就要移動，「先確保安全」只針對邊走邊打電話
+      if (safeT != null && m.call110T != null && m.call110T === repT && m.call110T < safeT) { s -= 15; n.push('還在移動中就先打電話，應先確保安全'); }
+      const delay = safeT != null ? repT - safeT : null; if (delay != null && delay > 30) { s -= Math.min(30, (delay - 30) / 3); n.push(`安全後 ${delay.toFixed(0)} 秒才報警`); }
+      if (m.call110T != null) n.push('有撥打 110');
+      if (hp) n.push(`向${hp.name}當面回報（由對方轉報 110）`);
       if (m.callControl) n.push('也通報了中控室');
     } else if (m.call119) { s = 50; n.push('只撥了 119，暴力事件要打 110'); }
     else if (m.callControl) { s = 45; n.push('只通報中控室，沒有撥打 110'); }
@@ -7628,6 +7852,7 @@ function scoreRun(g) {
   {
     const n = []; const qs = S.report.questions.length; let s = 0;
     if (m.answers.length) { s = m.answers.reduce((a, b) => a + (b.score || 0), 0) / qs * 100; for (const a of m.answers) if (a.score < 1 && a.why) n.push(a.why); if (m.answers.length < qs) n.push('通話在問答完成前中斷'); if (!n.length) n.push('報案資訊完整且正確'); }
+    else if (m.helpReport) n.push(`向${m.helpReport.name}當面回報，但沒有向 110 說明地點、人數與嫌犯特徵；安全時仍應撥 110 陳述`);
     else n.push('沒有向 110 說明狀況');
     res.reportSituation = clamp(Math.round(s), 0, 100); notes.reportSituation = n;
   }
@@ -7652,6 +7877,7 @@ const EVENT_META = {
   phoneStop: ['手機停止響鈴', 'info'], phoneSetting: ['調整手機聲音', 'info'], dial: ['撥打電話', 'alert'], reportDone: ['完成報案', 'alert'], doorRattle: ['暴徒試門', 'danger'],
   doorPeek: ['暴徒開門查看', 'danger'], police: ['警方抵達', 'alert'], escaped: ['撤離到安全處', 'run'], pa: ['中控室廣播', 'info'], fail: ['被發現', 'danger'], close: ['與暴徒距離過近', 'danger'],
   asForced: ['嫌犯強行通過風除室', 'danger'], coworkerSaved: ['帶同事一起行動', 'run'], quickReply: ['用訊息回覆來電', 'hide'], callControl: ['通報中控室', 'alert'], call119: ['撥打 119', 'alert'], airEmergency: ['按下風除室緊急開門', 'info'],
+  helpPointReport: ['當面回報', 'alert'],
 };
 const DEC_NAMES = { incident: '事件初期', incident_fab: '事件初期', incident_lobby: '事件初期', blocked: '遇到暴徒', fakeGuard: '門外有人叫門', police: '警方到場' };
 
@@ -7739,6 +7965,7 @@ class Debrief {
       const meta = EVENT_META[e.type]; let label = meta[0];
       if (e.type === 'decision') label = (DEC_NAMES[e.key] || '決策') + '：' + (e.correct ? '正確' : e.id === 'timeout' ? '未回應' : '需改進');
       if (e.type === 'dial') label = '撥打 ' + e.n;
+      if (e.type === 'helpPointReport') label = '向' + (e.name || '求援點') + '當面回報';
       if (e.type === 'hideStart') label = '開始躲藏：' + g.director.roomFull(e.zone);
       if (e.type === 'phoneRing') label = '手機來電（' + (e.ringer ? '鈴聲開' : e.vib ? '震動' : '靜音') + '）';
       if (e.type === 'phoneSetting') label = '手機：' + (e.ringer ? '鈴聲開' : '鈴聲關') + '、' + (e.vib ? '震動開' : '震動關');
@@ -7751,8 +7978,16 @@ class Debrief {
     const cards = h('section', { class: 'db-cards' });
     const all = [...S.slogan.run.items, ...S.slogan.hide.items, ...S.slogan.alert.items];
     for (const it of all) { const v = summary.res[it.id]; if (v == null || v >= 80) continue; cards.append(h('article', { class: 'db-card' }, h('h3', {}, h('span', { text: it.zh }), h('small', { text: it.en })), h('p', { class: 'what', text: (summary.notes[it.id] || []).join('；') }), h('p', { class: 'tip', text: it.tip }))); }
-    if (r.failLesson) cards.prepend(h('article', { class: 'db-card fail' }, h('h3', { text: '這次失敗的原因' }), h('p', { class: 'tip', text: r.failLesson })));
+    if (r.failLesson) cards.prepend(h('article', { class: 'db-card lost' }, h('h3', { text: '這次失敗的原因' }), h('p', { class: 'tip', text: r.failLesson })));
     if (!cards.childElementCount) cards.append(h('article', { class: 'db-card good' }, h('h3', { text: '表現穩定' }), h('p', { class: 'tip', text: '各項原則都做得很好。下次換一個起點，或挑戰「專項：躲＋報」。' })));
+    // 撤離方向提示（只提示、不計分）：跑（撤離）相關結局才顯示，專項「躲＋報」不顯示
+    if (r.mode !== 'hide' && (r.outcome === 'escaped' || (r.outcome === 'failed' && !r.phaseHide)) && S.lines.debriefEscapeDirection) {
+      const dirCard = h('article', { class: 'db-card db-escdir' }, h('h3', { text: '撤離方向' }), h('p', { class: 'tip', text: S.lines.debriefEscapeDirection }));
+      const DEEP = ['locker', 'gown', 'airShower', 'fab', 'fabYellow'];
+      const deep = r.start === 'fab' ? [] : DEEP.filter(z => (m.zoneT[z] || 0) >= 1.5);
+      if (deep.length && S.lines.debriefEscapeDeep) dirCard.append(h('p', { class: 'what db-escdeep', text: S.lines.debriefEscapeDeep.replace('{ZONES}', deep.map(z => g.director.roomFull(z)).join('、')) }));
+      cards.append(dirCard);
+    }
     R.append(h('h2', { class: 'db-h2', text: '檢討重點' }), cards);
     // 壓力反應
     this.hrc = h('canvas', { class: 'db-hr', width: '920', height: '200', 'aria-label': '心跳變化圖' });
@@ -7989,7 +8224,7 @@ function setupAggUI(g) {
 /* ============================================================
  * 18-main：啟動、情境載入、標題畫面、主迴圈
  * ============================================================ */
-const GAME_VERSION = 'v2.5';
+const GAME_VERSION = 'v2.6';
 // 難度：speed 嫌犯速度倍率、decision 決策秒數增減、count 嫌犯人數（0＝依教材機率）、hunt 往玩家附近搜索的機率、ringTwice 躲藏時手機響第二次
 const LEVELS = {
   easy: { zh: '新手', speed: 0.85, decision: 3, count: 1, hunt: 0.4, ringTwice: false, coach: true },
@@ -8013,6 +8248,7 @@ function validateScenario(S, base) {
   for (const k of ['incident', 'blocked', 'fakeGuard', 'police']) { const d = S.decisions[k]; if (!d || !Array.isArray(d.options) || d.options.length < 2) { issues.push('decisions.' + k + ' 格式錯誤，已還原預設'); S.decisions[k] = base.decisions[k]; } }
   if (!Array.isArray(S.report.questions) || !S.report.questions.length) { issues.push('report.questions 格式錯誤，已還原預設'); S.report.questions = base.report.questions; }
   if (!Array.isArray(S.contacts) || !S.contacts.some(c => c.kind === 'police')) { issues.push('contacts 需要至少一個 kind 為 police 的號碼，已還原預設'); S.contacts = base.contacts; }
+  if (S.helpPoints != null && !Array.isArray(S.helpPoints)) { issues.push('helpPoints 必須是陣列，已還原預設'); S.helpPoints = base.helpPoints; }
   if (!S.quiz || !Array.isArray(S.quiz.questions)) { S.quiz = base.quiz; }
   S.quiz.questions = S.quiz.questions.filter(q => Array.isArray(q.options) && q.options.length >= 2);
   for (const q of S.quiz.questions) if (!(q.answer >= 0 && q.answer < q.options.length)) { issues.push('quiz 題目「' + (q.q || '').slice(0, 12) + '」的 answer 超出選項範圍，已改為第一個選項'); q.answer = 0; }
@@ -8040,6 +8276,8 @@ function tryLoadExternal() {
   return Promise.all([one('scenario.js', 1500), one('voices.js', 6000)]);
 }
 
+// 小地圖只在新手難度＋教練模式開著的完整演練顯示（專項躲＋報不需要看地圖）
+Game.prototype.minimapOn = function () { return !!(this.settings.level === 'easy' && this.settings.coach && this.run && this.run.mode !== 'hide'); };
 Object.defineProperty(Game.prototype, 'level', { get() { return LEVELS[this.settings && this.settings.level] || LEVELS.normal; } });
 // ---------- 遊戲流程（掛在 Game 上） ----------
 Object.assign(Game.prototype, {
@@ -8057,7 +8295,7 @@ Object.assign(Game.prototype, {
     this.run = { t: 0, start, mode: opts.mode, seed, code: seedToCode(seed), rng: makeRng(seed), items: [], opts, hideCount: 1 };
     this.lastOpts = opts;
     this.metrics.reset(); this.phone.reset(); this.speech.cancel(); this.audio.stopAll();
-    this.hud.show(true); this.hud.setCoach(this.settings.coach); this.hud.objective(''); this.hud.checklist(null); this.hud.ringing(false);
+    this.hud.mapBase(w); this.hud.show(true); this.hud.setCoach(this.settings.coach); this.hud.objective(''); this.hud.checklist(null); this.hud.ringing(false);
     this.hud.fadeFlash([0, 0, 0], 1.6);
     $('#fail').hidden = true; $('#pause').hidden = true; this.debrief.close();
     this.director.start();
@@ -8148,6 +8386,7 @@ async function boot() {
   try { renderer = new Renderer(canvas); }
   catch (e) { errBox.hidden = false; errBox.textContent = '這台電腦的瀏覽器不支援 WebGL2，無法顯示 3D 畫面。請改用最新版 Chrome 或 Edge，並確認已開啟硬體加速。'; console.error(e); return; }
   const world = new World();
+  const help = resolveHelpPoints(S); world.setHelpPoints(help.list); issues.push(...help.issues);
   world.buildExitField();
   const charsOrig = world.chars.slice();
   const lights = buildLights(world);
@@ -8294,6 +8533,7 @@ function simulate(g, rdt, last = true) {
     H.vitals(p, rdt, g.settings.coach || run.phaseHide);
     const aw = []; for (const a of g.assailants) if (a.visible && a.mode !== 'gone' && a.mode !== 'arrested' && a.detect > 0.05) { const ang = angWrap(Math.atan2(a.x - p.x, -(a.z - p.z)) - p.yaw); aw.push({ angle: ang, level: a.detect }); }
     H.aware(aw); H.breath(p);
+    H.minimap(g.minimapOn(), p);
     if (g.settings.coach && run.phaseHide && !p.escaped) {
       const d = p.roomDoor; const inSolid = ['locked', 'closed', 'room'].includes(p.cover);
       H.checklist([
@@ -8312,7 +8552,7 @@ function handleInteraction(g, rdt) {
   if (g.phone.open || p.frozen > 0) { g.hud.promptFor(null, 0); return; }
   const t = g.findTarget(); const pr = g.targetPrompt(t);
   // 目標改變時重置長按
-  const key = t ? (t.type + (t.door ? t.door.id : '') + (t.m ? t.m.x : '') + (t.item ? t.item.id : '')) : '';
+  const key = t ? (t.type + (t.door ? t.door.id : '') + (t.m ? t.m.x : '') + (t.item ? t.item.id : '') + (t.hp ? t.hp.id : '')) : '';
   if (key !== p.holdKey) { p.holdKey = key; p.holdE = 0; p.holdDone = false; }
   if (I.down('KeyE') && t && pr) {
     p.holdE += rdt;
