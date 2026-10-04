@@ -127,7 +127,7 @@
   }
  },
  "people": {
-  "coworker": "小陳",
+  "coworker": "小剛",
   "manager": "王經理",
   "controlRoom": "中控室"
  },
@@ -368,6 +368,33 @@
   "doorShout": "裡面有沒有人？開門！",
   "fakeGuard": "我是保全，外面已經安全了，開門吧。"
  },
+ "insiderThreat": {
+  "_說明": "內部威脅情境：辦公區起點的完整演練中，同事{COWORKER}有一定機率在事件開始時突然持刀攻擊旁邊的同仁（取代大廳闖入，整局只有這一名嫌犯）。這個情境涉及真實同仁的觀感：公司版教材正式使用前，必須由公司權責單位（安全、人資）確認；不要這個情境時，請在 scenario.js 明確寫 \"enabled\": false（只是不寫這一段，會沿用內建的 true）。人名與衣著一律用虛構設定，不得使用真實同仁的姓名（姓名在 people.coworker）。chance 是各難度的發生機率（0～1，easy 新手、normal 標準、hard 進階），每局依情境代碼抽籤，同一代碼結果固定。weapon 是 assailant.weapons 裡的 id。outfit 是同事上衣、長褲的顏色（0～1 的 rgb），平常的同事與翻臉後的嫌犯共用，clothes 是它的文字描述，要一起改。翻臉後同事不出聲，caption 是畫面字幕；debriefTitle、debriefNote 是講評的說明卡；reportHint 是報案時只說特徵、沒說出是同事的講評說明。",
+  "enabled": true,
+  "chance": {
+   "easy": 0,
+   "normal": 0.15,
+   "hard": 0.25
+  },
+  "weapon": "knife",
+  "clothes": "淺藍色襯衫、深灰色長褲，戴著識別證",
+  "outfit": {
+   "top": [
+    0.62,
+    0.75,
+    0.9
+   ],
+   "pants": [
+    0.25,
+    0.26,
+    0.3
+   ]
+  },
+  "caption": "［{COWORKER}突然站起來，手上拿著{WEAPON}，朝旁邊的同仁衝過去］",
+  "debriefTitle": "這一局：內部人員威脅",
+  "debriefNote": "這一局的嫌犯是內部人員。熟人行兇時，旁人最常見的反應是愣住、以為對方在開玩笑。應變原則不變：先遠離、再躲避、安全後報警，並說出對方的姓名與單位。這是虛構的訓練情境，人物皆為虛構，不針對任何真實人員。",
+  "reportHint": "嫌犯是你認識的同事，直接說出姓名與單位，警方可以最快鎖定身分、調閱資料。"
+ },
  "lines": {
   "_說明": "who 可用：coworker（同事）、pa（廣播）、assailant（暴徒）、police（警察）、dispatcher（110）、narrator（旁白字幕）。",
   "intro": [
@@ -414,6 +441,9 @@
   "objectiveHidden": "保持安靜，並用手機撥打 110",
   "paFab": "緊急廣播，緊急廣播。大廳有持械男子闖入，已有人員受傷，嫌犯正往廠區內移動。Fab 內人員請立即由 Fab 逃生門疏散，不要經過更衣室與風除室。",
   "paFabBlocked": "緊急廣播。嫌犯已強行通過風除室進入 Fab。Fab 內人員請由北側或東側逃生門疏散；無法撤離的同仁，請就近躲避、保持安靜。",
+  "_說明_Fab闖入廣播": "Fab 起點的嫌犯進入路線每局隨機三選一：強行通過風除室（播 paFabBlocked）、從戶外撞開 Fab 北側逃生門（播 paFabBreachN）、從戶外撞開 Fab 東側逃生門（播 paFabBreachE）。三句要一起改，各自只換闖入位置與建議的疏散方向。每句以「。」切段錄音，開頭「緊急廣播。」與其他廣播共用同一段錄音，第二段要另外錄。",
+  "paFabBreachN": "緊急廣播。嫌犯已從 Fab 北側逃生門闖入，Fab 內人員請避開北側，改由東側逃生門疏散；無法撤離的同仁，請就近躲避、保持安靜。",
+  "paFabBreachE": "緊急廣播。嫌犯已從 Fab 東側逃生門闖入，Fab 內人員請避開東側，改由北側逃生門疏散；無法撤離的同仁，請就近躲避、保持安靜。",
   "paLobby": "緊急廣播，緊急廣播。大廳有持械男子闖入，已有人員受傷。大廳人員請立即往戶外疏散，遠離大樓。辦公區同仁請避開大廳與主走廊，就近躲避、保持安靜。",
   "paHideDrill": "緊急廣播。嫌犯目前在西側走道與參觀走道附近，所有安全門暫時無法通行。尚未撤離的同仁，請立即就近躲避，鎖門、關燈、手機靜音，並撥打110。"
  },
@@ -626,6 +656,42 @@
    ],
    "timeoutFeedback": "你愣住了。平時演練過的反應，才能讓身體在當下立刻動起來。",
    "timeoutDelay": 3
+  },
+  "incident_insider": {
+   "prompt": "{COWORKER}突然拿著{WEAPON}，攻擊旁邊的同仁。你會？",
+   "seconds": 7,
+   "options": [
+    {
+     "id": "go",
+     "text": "立刻往遠離他的方向，走最近的安全門撤離",
+     "correct": true,
+     "principle": "noHesitate",
+     "feedback": "不管對方是誰，看到有人持械攻擊就立刻遠離。"
+    },
+    {
+     "id": "calm",
+     "text": "他是認識的同事，過去勸他冷靜",
+     "principle": "noConfront",
+     "fatal": true,
+     "feedback": "對方手上有武器時，認識也不代表安全。勸說是警察與專業人員的工作，你要先拉開距離。"
+    },
+    {
+     "id": "joke",
+     "text": "他應該是在開玩笑，先待在原地看看",
+     "principle": "noHesitate",
+     "delay": 4,
+     "feedback": "熟人行兇時，旁人最常見的反應就是以為對方在開玩笑。看到武器和有人受傷，就要當真。"
+    },
+    {
+     "id": "stay",
+     "text": "停在原地，等廣播確認再說",
+     "principle": "noHesitate",
+     "delay": 4,
+     "feedback": "親眼看到攻擊，就不需要再等廣播確認。"
+    }
+   ],
+   "timeoutFeedback": "你愣住了。熟人突然行兇時，旁人最常見的反應就是不敢相信、愣在原地。",
+   "timeoutDelay": 3
   }
  },
  "report": {
@@ -691,11 +757,13 @@
    "locUnknown": "我也不知道這裡是哪裡……",
    "suspect": "{COUNT_TEXT}，穿{CLOTHES}、{HEADWEAR}，拿著{WEAPON}。",
    "suspectUnsure": "我沒看清楚，只知道有人拿武器，人數不確定。",
+   "suspectInsider": "是我們同事{COWORKER}，穿{CLOTHES}，拿著{WEAPON}。",
    "dirSeen": "我最後看到他在{LAST_SEEN}。",
    "dirWrong": "他在{WRONG_ZONE}。",
    "dirUnsure": "我躲起來了沒看到，只聽到腳步聲在附近。",
    "dirGone": "他應該已經離開了。",
    "injuryYes": "有，東側電梯廳有人受傷。",
+   "injuryYesInsider": "有，辦公區有同仁被攻擊受傷。",
    "injuryNo": "沒有人受傷。",
    "injuryUnsure": "我不確定。",
    "selfHidden": "我躲在{ROOM_FULL}，門已經鎖上，這裡有{HIDE_COUNT}人。",
@@ -4808,25 +4876,28 @@ function _part(r, kind, P, tx, ty, tz, sx, sy, sz, col, mat) {
 }
 const _DARK = [0.07, 0.07, 0.08], _EYE = [0.06, 0.05, 0.05], _LIP = [0.62, 0.36, 0.34], _WHITE = [0.93, 0.94, 0.96];
 function drawHumanoid(r, x, z, yaw, pose, outfit) {
-  if (r.addBlob) r.addBlob(x, z, 0.4, (pose.sit ? 0.35 : 0.55));
+  const lieRaw = pose.lie || 0, lie = lieRaw * lieRaw * (3 - 2 * lieRaw);   // 倒地進度（0 站、1 躺平），緩入緩出
+  if (r.addBlob) r.addBlob(x, z, lie > 0.5 ? 0.55 : 0.4, (pose.sit ? 0.35 : 0.55));
   const H = outfit.h || 1, fem = !!outfit.female;
   const base = _hb; M4.identity(base); M4.translate(base, x, 0, z); M4.rotY(base, -yaw); M4.scale(base, H, H, H);
+  // 倒地：身體以腳底為軸向後仰倒成面朝上，躺平後身體中心留在原位（腳朝面向、頭在背後），整體墊高半個身厚
+  if (lie > 0) { M4.translate(base, 0, lie * 0.14, -lie * 0.85); M4.rotX(base, lie * 1.5708); }
   const crouch = pose.crouch || 0, sit = pose.sit || 0;
   const ph = pose.phase || 0, amp = pose.amp || 0;
   const bobY = Math.abs(Math.sin(ph)) * 0.025 * amp;
-  const hipY = 0.93 - crouch * 0.38 - sit * 0.45 + bobY;
+  const hipY = 0.93 - crouch * 0.38 - sit * 0.45 + bobY - lie * 0.04;
   const suit = !!outfit.suit;
   const top = suit ? [0.94, 0.95, 0.97] : outfit.top, pants = suit ? [0.93, 0.94, 0.96] : outfit.pants;
   const skin = outfit.skin || [0.86, 0.68, 0.55], shoes = suit ? [0.35, 0.55, 0.9] : (outfit.shoes || [0.1, 0.1, 0.11]);
   const cm = suit ? 52 : 50, sm = suit ? 52 : 51;
-  const lean = (pose.lean || 0) + crouch * 0.35 + amp * 0.12;
+  const lean = ((pose.lean || 0) + crouch * 0.35 + amp * 0.12) * (1 - lie);
   const breathe = 1 + Math.sin((r.time || 0) * 1.7 + x * 3.1 + z) * 0.012;
   // 腿
   for (const side of [-1, 1]) {
     const lp = ph + (side < 0 ? 0 : Math.PI);
-    const hip = Math.sin(lp) * 0.55 * amp + crouch * 1.25 + sit * 1.5;
+    const hip = Math.sin(lp) * 0.55 * amp + crouch * 1.25 + sit * 1.5 ;
     const knee = -(Math.max(0, Math.sin(lp + 1.2)) * 1.0 * amp) - crouch * 2.1 - sit * 1.5;
-    M4.copy(_hj, base); M4.translate(_hj, side * (fem ? 0.085 : 0.095), hipY, 0); M4.rotX(_hj, hip);
+    M4.copy(_hj, base); M4.translate(_hj, side * (fem ? 0.085 : 0.095), hipY, 0); M4.rotZ(_hj, side * lie * (side < 0 ? 0.1 : 0.22)); M4.rotX(_hj, hip);
     _part(r, 'limb', _hj, 0, -0.22, 0, 0.165, 0.5, 0.18, pants, cm);
     M4.copy(_hk, _hj); M4.translate(_hk, 0, -0.45, 0); M4.rotX(_hk, knee);
     _part(r, 'limb', _hk, 0, -0.21, 0.005, 0.135, 0.47, 0.145, pants, cm);
@@ -4916,6 +4987,7 @@ function drawHumanoid(r, x, z, yaw, pose, outfit) {
     if (pose.phone && side > 0) { sh = 0.9; el = -1.9; }
     if (outfit.weapon && side > 0 && !pose.handsUp && !pose.push) { sh = sh * 0.5 + 0.35 + (pose.raise || 0) * 1.6; el = -0.35; }
     if (sit) { sh = 0.5; el = -0.9; }
+    if (lie > 0) { sh = lerp(sh, side * 0.15, lie); el = lerp(el, -0.3, lie); rz = lerp(rz, side * 0.4, lie); }
     M4.copy(_hk, _hj); M4.translate(_hk, side * shX, 0.505, 0);
     _part(r, 'ball', _hk, -side * 0.02, 0.0, 0, 0.125, 0.12, 0.135, outfit.vest && !suit ? outfit.vest : top, cm); // 肩
     M4.rotZ(_hk, rz); M4.rotX(_hk, sh);
@@ -5511,7 +5583,7 @@ function collectVoiceLines(S) {
   };
   const L = S.lines || {};
   // 廣播：與遊戲相同，以句號切段
-  for (const k of ['pa1', 'paSecond', 'paBlocked', 'paBlockedEast', 'paBlockedObs', 'paPolice', 'paLobby', 'paFab', 'paFabBlocked', 'paHideDrill']) {
+  for (const k of ['pa1', 'paSecond', 'paBlocked', 'paBlockedEast', 'paBlockedObs', 'paPolice', 'paLobby', 'paFab', 'paFabBlocked', 'paFabBreachN', 'paFabBreachE', 'paHideDrill']) {
     if (!L[k]) continue; fmt(L[k]).split(/(?<=。)/).filter(s => s.trim()).forEach((p, i) => add('pa', p, k, 'lines.' + k + '#' + (i + 1)));
   }
   (L.intro || []).forEach((l, i) => add(l.who, fmt(l.text), 'intro', 'lines.intro[' + i + ']'));
@@ -5838,7 +5910,7 @@ class Actor {
   constructor(g, o) {
     this.g = g; this.id = ACTOR_ID++; this.x = o.x; this.z = o.z; this.yaw = o.yaw || 0; this.outfit = o.outfit;
     this.kind = o.kind || 'npc'; this.name = o.name || ''; this.speed = 0; this.phase = Math.random() * 6; this.amp = 0;
-    this.path = null; this.pi = 0; this.alive = true; this.visible = true; this.crouch = 0; this.sit = o.sit ? 1 : 0;
+    this.path = null; this.pi = 0; this.alive = true; this.visible = true; this.crouch = 0; this.sit = o.sit ? 1 : 0; this.lie = 0;
     this.pose = { phase: 0, amp: 0, crouch: 0, sit: 0, look: 0 }; this.look = 0; this.lookT = 0; this.mode = o.mode || 'idle';
     this.wait = 0; this.doorWait = 0; this.stuck = 0; this.handsUp = 0; this.push = 0; this.pushT = 0; this.phone = false;
     this.lastX = this.x; this.lastZ = this.z; this.steps = 0; this.stepDist = 0;
@@ -5875,7 +5947,7 @@ class Actor {
     const moved = Math.hypot(this.x - this.lastX, this.z - this.lastZ); this.lastX = this.x; this.lastZ = this.z;
     const v = moved / Math.max(dt, 1e-4);
     this.phase += moved * 3.1; this.amp = approach(this.amp, clamp(v / 2.6, 0, 1), 8, dt);
-    this.pose.phase = this.phase; this.pose.amp = this.amp; this.pose.crouch = this.crouch; this.pose.sit = this.sit;
+    this.pose.phase = this.phase; this.pose.amp = this.amp; this.pose.crouch = this.crouch; this.pose.sit = this.sit; this.pose.lie = this.lie;
     this.lookT -= dt; if (this.lookT < 0) { this.lookT = 1 + Math.random() * 2.5; this.look = (Math.random() - 0.5) * (this.mode === 'search' ? 1.6 : 0.6); }
     this.pose.look = approach(this.pose.look || 0, this.look, 4, dt); this.pose.handsUp = this.handsUp; this.pose.push = this.push; this.pose.pushT = this.pushT; this.pose.phone = this.phone;
     // 腳步聲
@@ -5883,15 +5955,30 @@ class Actor {
     const stride = v > 2.2 ? 1.25 : 0.85;
     if (this.stepAcc > stride && this.visible) { this.stepAcc = 0; this.g.actorStep(this, v); }
   }
+  // 倒地時的朝向：躺平的身體沿面向軸伸展約 ±0.9 公尺、寬約 0.45，從目前朝向起找最小轉角、整條身體都不壓到牆／家具／門的朝向
+  pickLieYaw() {
+    const w = this.g.world;
+    const free = (yaw) => {
+      const fx = Math.sin(yaw), fz = -Math.cos(yaw);
+      for (let t = -0.95; t <= 0.951; t += 0.19) for (const s of [-0.22, 0, 0.22]) {
+        const cx = Math.floor(this.x + fx * t - fz * s), cz = Math.floor(this.z + fz * t + fx * s);
+        if (!w.inb(cx, cz)) return false;
+        const d = TILE_DEFS[w.ch(cx, cz)]; if (d.move || d.kind === 'door') return false;
+      }
+      return true;
+    };
+    for (const off of [0, Math.PI / 2, -Math.PI / 2, Math.PI]) if (free(this.yaw + off)) return this.yaw + off;
+    return this.yaw;
+  }
   draw(r) { if (this.visible && this.alive) drawHumanoid(r, this.x, this.z, this.yaw, this.pose, this.outfit); }
-  snapshot() { return [+this.x.toFixed(2), +this.z.toFixed(2), +this.yaw.toFixed(2), +this.amp.toFixed(2), +(this.phase % 100).toFixed(2), +this.crouch.toFixed(2), this.visible ? 1 : 0, +this.handsUp.toFixed(2), +this.sit.toFixed(2)]; }
+  snapshot() { return [+this.x.toFixed(2), +this.z.toFixed(2), +this.yaw.toFixed(2), +this.amp.toFixed(2), +(this.phase % 100).toFixed(2), +this.crouch.toFixed(2), this.visible ? 1 : 0, +this.handsUp.toFixed(2), +this.sit.toFixed(2), +this.lie.toFixed(2)]; }
 }
 
 /* ---------- 一般人員 ---------- */
 class Civilian extends Actor {
   constructor(g, o) { super(g, o); this.home = [o.x, o.z, o.yaw || 0]; this.routine = o.routine || null; this.rt = Math.random() * 5; this.fleeing = false; }
   flee(delay = 0) {
-    this.mode = 'flee'; this.wait = delay; this.sit = 0; this.fleeing = true; this.path = null; this.handsUp = 0; this.look = 0; this.crouch = 0;
+    this.mode = 'flee'; this.wait = delay; this.sit = 0; this.lie = 0; this.lieYaw = null; this.fleeing = true; this.path = null; this.handsUp = 0; this.look = 0; this.crouch = 0;
   }
   update(dt) {
     const g = this.g, w = g.world;
@@ -5934,7 +6021,7 @@ class Civilian extends Actor {
       }
       case 'hide': { this.speed = 0; this.crouch = approach(this.crouch, 1, 4, dt); break; }
       case 'freeze': { this.speed = 0; this.look = Math.sin(g.run.t * 2.2 + this.id) * 0.7; this.handsUp = approach(this.handsUp || 0, 0.25, 3, dt); break; }
-      case 'down': { this.speed = 0; this.sit = approach(this.sit, 1, 3, dt); break; }
+      case 'down': { this.speed = 0; this.sit = approach(this.sit, 0, 14, dt); if (this.lieYaw == null) this.lieYaw = this.pickLieYaw(); this.yaw += angDiff(this.yaw, this.lieYaw) * (1 - Math.exp(-8 * dt)); this.crouch = approach(this.crouch, 0, 6, dt); this.handsUp = approach(this.handsUp || 0, 0, 6, dt); this.lie = Math.min(1, this.lie + dt / 0.5); break; }   // 倒地 0.5 秒（線性進度，畫的時候再做緩入緩出）
       case 'investigate': { const r = this.follow(dt, 1.4); if (r === 'done' && this.onArrive) { const f = this.onArrive; this.onArrive = null; f(this); } break; }
       default: break;
     }
@@ -5949,10 +6036,19 @@ class Assailant extends Actor {
     this.script = []; this.si = 0; this.patrolCool = 0; this.lastPoi = null; this.shoutCool = 8 + Math.random() * 8; this.doorCool = 0;
     this.region = o.region || null; this.checkedDoors = new Map(); const lv = g.level ? g.level.speed : 1; this.speedWalk = g.S.tuning.assailantWalkSpeed * lv; this.speedRush = g.S.tuning.assailantRushSpeed * lv; this.speedChase = g.S.tuning.assailantChaseSpeed * lv;
     this.seenByPlayer = 0; this.raise = 0;
+    this.silent = !!o.silent;   // true＝不喊叫、不說話（內部威脅的同事）
   }
   runScript(steps) { this.script = steps; this.si = 0; this.mode = 'script'; this.visible = true; this.path = null; }
   update(dt) {
     const g = this.g, w = g.world, p = g.player;
+    // 戶外繞行中（劇本 warp 步驟）：看不見，時間到才在另一扇門出現；途中被收場（gone）就不再出現
+    if (this.offstage != null) {
+      if (this.mode !== 'script') { this.offstage = null; return; }
+      this.offstage -= dt; if (this.offstage > 0) return;
+      const st = this.script[this.si]; this.offstage = null;
+      this.x = this.lastX = st.warp[0]; this.z = this.lastZ = st.warp[1]; this.path = null; this.visible = true;
+      if (st.onEnd) st.onEnd(this); this.si++; return;
+    }
     if (!this.visible || this.mode === 'hidden' || this.mode === 'gone') { return; }
     // 感知
     const see = g.playerVisibleTo(this);
@@ -5995,6 +6091,8 @@ class Assailant extends Actor {
   }
   updScript(dt) {
     const st = this.script[this.si]; if (!st) { this.mode = 'patrol'; this.path = null; return; }
+    // warp：走出逃生門後消失 hide 秒（戶外繞行），再出現在 warp 座標（由 update 開頭處理）
+    if (st.warp) { if (st.onStart) st.onStart(this); this.visible = false; this.speed = 0; this.offstage = st.hide || 0; return; }
     if (!st._init) { st._init = true; if (st.onStart) st.onStart(this); if (st.to && !this.setPath(st.to[0], st.to[1])) { this.si++; return; } st._t = 0; }
     st._t += dt;
     if (st.to) {
@@ -6270,6 +6368,7 @@ class Game {
     return pick;
   }
   assailantShout(a, short) {
+    if (a.silent) return;   // 內部威脅：同事翻臉後不出聲（嫌犯語音是另一個人的聲音）
     const p = this.player; const d = Math.hypot(a.x - p.x, a.z - p.z); if (d > 26) return;
     const occ = this.occ(a.x, a.z);
     const lines = this.S.assailant.shouts;
@@ -6293,7 +6392,7 @@ class Game {
     this.player.hr = Math.min(180, this.player.hr + 30);
     this.hud.toast('你被發現了！快離開他的視線', 2.5, 'danger');
     this.audio.shouts([a.x, 1.6, a.z], this.occ(a.x, a.z), 2, 1);
-    if (Math.random() < 0.6) this.speech.say('站住！', 'assailant', { volume: 1, priority: 'high' });
+    if (!a.silent && Math.random() < 0.6) this.speech.say('站住！', 'assailant', { volume: 1, priority: 'high' });
     this.run.phaseRun = true;
   }
   caught(a, why) { if (this.run.ended) return; this.director.fail(why === 'chase' ? 'caught' : why, a); }
@@ -6659,6 +6758,15 @@ class Game {
  * 13-director：劇情導演（三種起點＋專項躲藏）
  * ============================================================ */
 const WEEK = ['日', '一', '二', '三', '四', '五', '六'];
+// Fab 起點的嫌犯進入路線：airShower＝原本強行通過風除室；north／east＝從戶外撞開 Fab 逃生門
+const FAB_ROUTES = ['airShower', 'north', 'east'];
+// via：建築物內走到哪扇安全門；outdoorM：戶外繞行公尺數（換算消失秒數）；warp：Fab 逃生門內側的出現點
+const FAB_OUTDOOR = {
+  north: { via: [[48.5, 48.6], [8, 48.6], [2.7, 46], [2.7, 30], [2.6, 24.6]], outExit: 'exitNW', outdoorM: 26, inExit: 'exitFabN1', warp: [5.5, 2.6], bang: [5.5, 1.5], aisle: [5.5, 10.5],
+    ends: [[13, 11], [21, 11], [29, 11], [21.5, 5]], pa: 'paFabBreachN' },
+  east: { via: [[68.5, 60.6]], outExit: 'exitMain', outdoorM: 70, inExit: 'exitFabE', warp: [66.2, 11.5], bang: [67.5, 11.5], aisle: [60, 11.5],
+    ends: [[53, 11], [45, 11], [37.5, 11.5], [45.5, 17]], pa: 'paFabBreachE' },
+};
 class Director {
   constructor(g) { this.g = g; this.timers = []; this.watchers = []; }
   reset() { this.timers = []; this.watchers = []; this.forceCheck = null; this.doorEpisode = null; this.co = null; this.guard = null; this.cop = null; }
@@ -6720,7 +6828,23 @@ class Director {
       route: rng.pick(['west', 'east', 'obs', 'corridor']), routeVar: Math.floor(rng() * 1000), phoneDelay: rng.range(S.tuning.phoneRingDelay[0], S.tuning.phoneRingDelay[1]),
     };
     const tr = run.truth;
-    const outfitA = { top: tr.top.rgb, pants: tr.pants.rgb, head: tr.head.id, weapon: tr.weapon.id, skin: [0.8, 0.62, 0.5], hair: [0.05, 0.05, 0.05], shoes: [0.08, 0.08, 0.08] };
+    // Fab 起點的進入路線：由 routeVar 決定，不另外抽 rng，其他起點同一種子的結果不受影響
+    tr.fabRoute = start === 'fab' && run.mode !== 'hide' ? FAB_ROUTES[tr.routeVar % FAB_ROUTES.length] : null;
+    // 內部威脅（同事突然持刀）：只在辦公區起點＋完整演練抽籤，用獨立亂數，不動 run.rng 的抽取順序
+    const IT = S.insiderThreat || {};
+    const insiderRoll = makeRng((run.seed ^ 0x1a51de4) >>> 0)();
+    tr.insider = !!(IT.enabled && start === 'office' && run.mode === 'full' && insiderRoll < (+((IT.chance || {})[g.settings.level || 'normal']) || 0));
+    if (tr.insider) {
+      // 整局只有一名嫌犯，就是同事；{CLOTHES}{HEADWEAR}{WEAPON} 代換跟著同事的外觀
+      const co = this.coworkerOutfit();
+      tr.count = 1;
+      tr.top = { zh: IT.clothes || '淺藍色襯衫、深灰色長褲，戴著識別證', rgb: co.top };
+      tr.pants = { zh: '', rgb: co.pants };
+      tr.head = S.assailant.headwear.find(x => x.id === 'none') || { id: 'none', zh: '沒有戴帽子' };
+      tr.weapon = S.assailant.weapons.find(x => x.id === IT.weapon) || tr.weapon;
+    }
+    const outfitA = tr.insider ? Object.assign(this.coworkerOutfit(), { weapon: tr.weapon.id })
+      : { top: tr.top.rgb, pants: tr.pants.rgb, head: tr.head.id, weapon: tr.weapon.id, skin: [0.8, 0.62, 0.5], hair: [0.05, 0.05, 0.05], shoes: [0.08, 0.08, 0.08] };
     const top2 = S.assailant.tops.find(t => t !== tr.top) || tr.top;
     const outfitB = { top: top2.rgb, pants: [0.08, 0.08, 0.09], head: 'mask', weapon: 'rod', skin: [0.78, 0.6, 0.48] };
     run.truth.topB = top2;
@@ -6753,16 +6877,23 @@ class Director {
     g.civilians.push(c); g.actors.push(c); return c;
   }
   introCard(lines) { this.g.hud.card(lines.map(l => this.fmt(l)), 4.2); }
+  // 辦公區同事的服裝（顏色在教材 insiderThreat.outfit，內部威脅時嫌犯沿用同一套，識別證保留）
+  coworkerOutfit() {
+    const o = (this.g.S.insiderThreat || {}).outfit || {};
+    return { top: o.top || [0.62, 0.75, 0.9], pants: o.pants || [0.25, 0.26, 0.3], hair: [0.05, 0.05, 0.05], badge: [0.15, 0.65, 0.69] };
+  }
 
   startOffice() {
     const g = this.g, run = g.run, S = g.S;
-    const co = this.spawnCiv({ x: 18.5, z: 38.75, yaw: Math.PI, sit: true, outfit: { top: [0.62, 0.75, 0.9], pants: [0.25, 0.26, 0.3], hair: [0.05, 0.05, 0.05], badge: [0.15, 0.65, 0.69] }, name: 'coworker' });
+    const co = this.spawnCiv({ x: 18.5, z: 38.75, yaw: Math.PI, sit: true, outfit: this.coworkerOutfit(), name: 'coworker' });
     this.co = co;
     this.introCard(['{DATE}（{WEEKDAY}）{CLOCK}', '{SITE}　{BUILDING} {FLOOR}　' + this.roomFull('office')]);
     this.at(2.2, () => S.lines.intro.forEach(l => this.say(l.who, l.text)));
     g.hud.objective(this.fmt(S.lines.objectiveIntro));
-    run.items.push({ id: 'doc', label: '拿文件', x: 29.6, y: 1.05, z: 27.95, r: 2.3, onTap: (it) => { it.done = true; g.audio.uiBlip('ok'); g.hud.toast(S.lines.pickupDoc, 1.5); g.metrics.event('objective', { id: 'doc' }); this.at(2.5, () => this.breach()); } });
-    this.at(S.tuning.introTimeout, () => { if (!run.breached) this.breach(); });
+    // 內部威脅：事件改成同事翻臉（取代大廳闖入），時間點相同
+    const trigger = () => (run.truth.insider ? this.insiderTurn() : this.breach());
+    run.items.push({ id: 'doc', label: '拿文件', x: 29.6, y: 1.05, z: 27.95, r: 2.3, onTap: (it) => { it.done = true; g.audio.uiBlip('ok'); g.hud.toast(S.lines.pickupDoc, 1.5); g.metrics.event('objective', { id: 'doc' }); this.at(2.5, trigger); } });
+    this.at(S.tuning.introTimeout, () => { if (!run.breached) trigger(); });
   }
   startFab() {
     const g = this.g, run = g.run, S = g.S;
@@ -6834,7 +6965,8 @@ class Director {
         if (start === 'lobby') cue();
         if (start === 'fab') this.at(4, cue);
       } },
-      { to: [65.5, 48.2], speed: A.speedRush },
+      // Fab 東側路線直接從正門出去繞到戶外，不經過門禁閘門
+      ...(run.truth.fabRoute === 'east' ? [] : [{ to: [65.5, 48.2], speed: A.speedRush }]),
       ...this.routeFor(start),
     ]);
     // 其他 NPC 反應
@@ -6847,11 +6979,44 @@ class Director {
       this.at(10, () => this.when(() => run.ended || g.player.escaped || run.heardPA, () => this.at(3, () => { if (!run.ended && !g.player.escaped) this.pa('paSecond'); })));
     });
   }
+  /* ---------- 內部威脅：同事突然持刀（取代大廳闖入） ---------- */
+  insiderTurn() {
+    const g = this.g, run = g.run, S = g.S, IT = S.insiderThreat || {}; if (run.breached) return; run.breached = true; run.breachT = run.t;
+    const co = this.co, A = g.assailants[0]; if (!co || !A) return;
+    // 開局就生好的 0 號嫌犯（已換上同事服裝）站到同事的位置；同事本人藏起來，this.co = null 讓同事台詞、跟隨、一起躲都自動跳過
+    A.silent = true; A.x = A.lastX = co.x; A.z = A.lastZ = co.z; A.yaw = co.yaw;
+    co.visible = false; co.mode = 'gone'; co.interact = false; this.co = null;
+    // 被攻擊的同仁：離同事最近的辦公區人員（不參與撤離抽籤，倒地不動）
+    const vic = g.civilians.filter(c => c.tag === 'office' && c.visible).sort((a, b) => Math.hypot(a.x - A.x, a.z - A.z) - Math.hypot(b.x - A.x, b.z - A.z))[0];
+    if (vic) vic.tag = 'insiderVictim';
+    const p = g.player;
+    A.runScript([
+      { wait: 1.0, face: [p.x, p.z] },
+      ...(vic ? [
+        { to: [vic.x, vic.z], speed: A.speedRush },
+        { wait: 0.6, face: [vic.x, vic.z], onStart: () => {
+          vic.mode = 'down'; vic.path = null; vic.wantSit = false;
+          g.audio.thud(0.2); g.audio.scream([vic.x, 1.5, vic.z], g.occ(vic.x, vic.z), 1.1);
+          this.at(0.8, () => this.decision('incident_insider', 'incident'));   // 題目說「攻擊旁邊的同仁」，等真的砍倒才問
+        } },
+      ] : []),
+      { wait: 0.8, onEnd: (a) => { a.region = 'office'; a.regionT = 25; } },
+    ]);
+    g.metrics.event('insiderTurn', {});
+    g.hud.caption(this.fmt(IT.caption || '［{COWORKER}突然站起來，手上拿著{WEAPON}，朝旁邊的同仁衝過去］'), 3.5);
+    this.incident(0, 'insider');
+    if (!vic) this.at(2.2, () => this.decision('incident_insider', 'incident'));
+    // 不播 pa1（大廳闖入）；改播已錄好的位置廣播，依嫌犯當下位置三選一，只播一次
+    run.paBlockedDone = true;
+    this.at(6, () => { if (!run.ended && !g.player.escaped) this.pa(this.paBlockedKey()); });
+  }
   volAt(x, z) { const p = this.g.player; const d = Math.hypot(x - p.x, z - p.z); return clamp(1.1 - d / 30, 0.08, 1) * (0.35 + 0.65 * this.g.occ(x, z)); }
   routeFor(start) {
     const g = this.g, run = g.run; const A = g.assailants[0]; const R = A.speedRush;
     const cueOffice = () => { if (start === 'office') this.cueOffice(); };
     if (start === 'fab') {
+      const fr = run.truth.fabRoute;
+      if (fr === 'north' || fr === 'east') return this.fabOutdoorRoute(fr, R);
       const asG = g.world.doors.filter(d => d.group === 'asGown'), asF = g.world.doors.filter(d => d.group === 'asFab');
       return [
         { to: [48.5, 48.6], speed: R }, { to: [40.5, 48.4], speed: R }, { to: [40.5, 42], speed: R }, { to: [40.5, 34.4], speed: R },
@@ -6886,6 +7051,28 @@ class Director {
       return head.concat([{ to: jit(stop, 48.6, 2), speed: sp() }, look(stop, 44), { to: jit(8, 48.6), speed: sp(0.85) }, { to: [2.7, 46], speed: sp() }, ...(rng() < 0.5 ? [look(2.7, 36)] : []), { to: [2.7, 40], speed: 2.2 }, { to: jit(6.5, 38), speed: 1.8, onArrive: enter('office') }]);
     }
     return head.concat([{ to: [8, 48.6], speed: sp() }, { to: [2.7, 46], speed: sp() }, { to: [2.7, 40], speed: 2.2 }, { to: jit(6.5, 38), speed: 1.8, onArrive: enter('office') }]);
+  }
+  // Fab 北側／東側：嫌犯從某扇安全門走出建築物（玩家看不到的戶外繞行），再強行打開 Fab 逃生門闖入
+  //   north：主走廊往西 → 西側走道 → 參觀走道旁的西北側安全門出去 → 戶外約 26 公尺 → Fab 北側逃生門 1
+  //   east ：被保全攔下後轉身從大廳正門出去 → 沿大樓東側戶外約 70 公尺 → Fab 東側逃生門
+  fabOutdoorRoute(fr, R) {
+    const g = this.g, run = g.run;
+    const P = FAB_OUTDOOR[fr];
+    const out = g.world.doors.filter(d => d.exit === P.outExit), inn = g.world.doors.filter(d => d.exit === P.inExit);
+    const end = run.rng.pick(P.ends);
+    return [
+      ...P.via.map(p => ({ to: p, speed: R })),
+      { warp: P.warp, hide: P.outdoorM / (R * 0.9),
+        onStart: (a) => { out.forEach(d => { d.target = 1; d.autoClose = 3; }); g.audio.doorOpen([a.x, 1.2, a.z], g.occ(a.x, a.z), true); },
+        onEnd: () => {
+          const [x, z] = P.bang;
+          inn.forEach(d => { d.target = 1; d.autoClose = 4; }); g.audio.bang([x, 1.5, z], g.occ(x, z), 1.3); g.audio.alarm(true);
+          g.metrics.event('fabExitForced', { exit: P.inExit });
+          this.at(0.5, () => { if (!run.ended) this.pa(P.pa); });
+        } },
+      { to: P.aisle, speed: R },
+      { to: end, speed: 2.2, onArrive: (a) => { a.region = 'fab'; } },
+    ];
   }
   cueFromBreach() {
     const g = this.g, run = g.run, S = g.S;
@@ -6926,7 +7113,7 @@ class Director {
     this.at(delay + 4, () => { if (run.ended) return; g.audio.alarm(true); for (const l of g.lights) if (l.beacon) { l.on = true; } run.beacons = true; this.at(25, () => g.audio.alarm(false)); });
     // 一般人員撤離
     for (const c of g.civilians) {
-      if (c.tag === 'coworker' || c.tag === 'guard' || c.tag === 'gateEmp') continue;
+      if (c.tag === 'coworker' || c.tag === 'guard' || c.tag === 'gateEmp' || c.tag === 'insiderVictim') continue;
       const dly = (c.fleeDelay || 2) + (why === 'fab' && c.outfit.suit ? 0 : 0);
       const roll = run.rng(), sitting = !!c.wantSit;
       if (roll < 0.5 || c.outfit.suit) this.at(delay + dly, () => { if (!c.escaped) c.flee(0); });
@@ -6998,7 +7185,8 @@ class Director {
   commonWatchers() {
     const g = this.g, run = g.run, S = g.S;
     // 看見暴徒 → 決策 2
-    this.when(() => run.incident && !run.phaseHide && !g.player.escaped && g.assailants.some(a => a.visible && a.mode !== 'gone' && g.playerSees(a) && Math.hypot(a.x - g.player.x, a.z - g.player.z) < 20) && g.state === 'playing', () => {
+    // 內部威脅：同事翻臉的那一刻就是事件本身，先問 incident_insider，問完才可能出「遇到暴徒」
+    this.when(() => run.incident && !run.phaseHide && !g.player.escaped && !(run.truth.insider && !(run.decided && run.decided.incident_insider)) && g.assailants.some(a => a.visible && a.mode !== 'gone' && g.playerSees(a) && Math.hypot(a.x - g.player.x, a.z - g.player.z) < 20) && g.state === 'playing', () => {
       const a = g.assailants.find(q => q.visible && g.playerSees(q)); if (a && a.mode === 'chase') { run.phaseHide = true; return; }
       const isB = a && a === g.assailants[1];
       this.decision('blocked', 'blocked', isB ? { CLOTHES: run.truth.topB.zh, WEAPON: '鐵棍', AID: 1 } : { AID: 0 });
@@ -7037,6 +7225,7 @@ class Director {
     g.metrics.event('doorRattle', { room: d.room, mine, locked: d.locked, barricaded: d.barricaded });
     if (!mine) return;
     this.doorEpisode = { a, d };
+    if (a.silent) return;   // 內部威脅：同事翻臉後不出聲（沒有叫門與假保全，門照樣會被推、被踹）
     this.at(1.8, () => this.say('assailant', S.assailant.doorShout, { volume: 0.9, label: '（門外）', priority: 'high' }));
     if (!run.fakeGuardDone) {
       run.fakeGuardDone = true; a.doorHold = 1e9;
@@ -7139,6 +7328,14 @@ class Director {
       case 'suspect': {
         const tr = run.truth; const seen = ob.seen; const seenCount = ob.count || 0;
         const wrongTop = S.assailant.tops.find(t => t !== tr.top) || { zh: '白色上衣' }, wrongW = S.assailant.weapons.find(w => w !== tr.weapon) || { zh: '槍' };
+        if (tr.insider && T.suspectInsider) {
+          // 內部威脅：說出「是我們同事」最有價值；只說特徵不說身分給 0.7
+          add(T.suspectInsider, 1);
+          add(T.suspect, 0.7, (S.insiderThreat || {}).reportHint || '嫌犯是你認識的同事，直接說出姓名與單位，警方可以最快鎖定身分、調閱資料。');
+          add(T.suspect, 0, '特徵描述錯誤，可能讓警方誤判目標。', { CLOTHES: wrongTop.zh, WEAPON: wrongW.zh, COUNT_TEXT: '兩名男子' });
+          add(T.suspectUnsure, seen ? 0.4 : 1, seen ? '你其實看過嫌犯，能提供的特徵就要說出來。' : null);
+          break;
+        }
         add(T.suspect, 1);
         if (tr.count === 2 && seenCount === 1) add(T.suspect, 0.8, '實際上有兩名嫌犯，你只看到一名。', { COUNT_TEXT: '一名男子' });
         add(T.suspect, 0, '特徵描述錯誤，可能讓警方誤判目標。', { CLOTHES: wrongTop.zh, WEAPON: wrongW.zh, COUNT_TEXT: tr.count === 2 ? '一名男子' : '兩名男子' });
@@ -7147,7 +7344,9 @@ class Director {
       }
       case 'direction': {
         const seen = ob.lastZone && run.t - (ob.lastT || 0) < 120;
-        const zones = ['lobbySecure', 'corridor', 'office', 'westAisle', 'obs', 'fab', 'gown'].filter(z => z !== ob.lastZone);
+        // 錯誤位置不能跟實際位置是同一處（Fab 與黃光區、大廳內外都算同一處）
+        const fam = (z) => (z === 'fabYellow' || z === 'spare' ? 'fab' : z === 'lobbyPublic' ? 'lobbySecure' : z);
+        const zones = ['lobbySecure', 'corridor', 'office', 'westAisle', 'obs', 'fab', 'gown'].filter(z => fam(z) !== fam(ob.lastZone));
         if (seen) { add(T.dirSeen, 1); add(T.dirUnsure, 0.5, '你有看到嫌犯的位置，應該說出來。'); }
         else { add(T.dirUnsure, 1); add(T.dirSeen, 0, '你沒有看到嫌犯，不要猜測位置。', { LAST_SEEN: this.roomFull(run.rng.pick(zones)) }); }
         add(T.dirWrong, 0, '錯誤的位置會誤導警方。', { WRONG_ZONE: this.roomFull(run.rng.pick(zones)) });
@@ -7156,7 +7355,7 @@ class Director {
       }
       case 'injury': {
         const knows = run.heardPA || run.guardDown && run.start === 'lobby';
-        add(T.injuryYes, 1); add(T.injuryUnsure, knows ? 0.4 : 0.8, knows ? '廣播已經說有人受傷，要轉告警方。' : null); add(T.injuryNo, 0, '不確定時不要說「沒有」。');
+        add(run.truth.insider && T.injuryYesInsider ? T.injuryYesInsider : T.injuryYes, 1); add(T.injuryUnsure, knows ? 0.4 : 0.8, knows ? '廣播已經說有人受傷，要轉告警方。' : null); add(T.injuryNo, 0, '不確定時不要說「沒有」。');
         break;
       }
       case 'self': {
@@ -7768,8 +7967,8 @@ function scoreRun(g) {
   // 1 不猶豫
   {
     let s = 100; const n = [];
-    const d = dec.incident || dec.incident_fab || dec.incident_lobby;
-    if (d) { if (d.timeout) { s -= 45; n.push('決策時愣住沒有回應'); } else if (!d.correct) { s -= d.id === 'look' ? 35 : 45; n.push('第一時間選擇了「' + (d.id === 'pack' ? '收拾物品' : d.id === 'look' ? '過去看看' : d.id === 'wait' ? '等待確認' : d.id === 'lot' ? '先把作業做完' : d.id === 'film' ? '拿手機錄影' : d.id === 'help' ? '上前扶保全' : d.id === 'gown' ? '走更衣室出去' : '其他') + '」'); } else if (d.rt > 4) { s -= Math.min(15, (d.rt - 4) * 4); n.push(`決策花了 ${d.rt.toFixed(1)} 秒`); } }
+    const d = dec.incident || dec.incident_fab || dec.incident_lobby || dec.incident_insider;
+    if (d) { if (d.timeout) { s -= 45; n.push('決策時愣住沒有回應'); } else if (!d.correct) { s -= d.id === 'look' ? 35 : 45; n.push('第一時間選擇了「' + (d.id === 'pack' ? '收拾物品' : d.id === 'look' ? '過去看看' : d.id === 'wait' || d.id === 'stay' ? '等待確認' : d.id === 'joke' ? '以為是在開玩笑' : d.id === 'calm' ? '過去勸他冷靜' : d.id === 'lot' ? '先把作業做完' : d.id === 'film' ? '拿手機錄影' : d.id === 'help' ? '上前扶保全' : d.id === 'gown' ? '走更衣室出去' : '其他') + '」'); } else if (d.rt > 4) { s -= Math.min(15, (d.rt - 4) * 4); n.push(`決策花了 ${d.rt.toFixed(1)} 秒`); } }
     if (m.reactionT != null) { if (m.reactionT > 4) { s -= Math.min(35, (m.reactionT - 4) * 4); } n.push(`事件發生後 ${m.reactionT.toFixed(1)} 秒開始行動`); }
     else if (m.cueT != null && r.mode !== 'hide') { s -= 35; n.push('事件發生後一直沒有離開原地'); }
     if (m.idleRun > 4) { s -= Math.min(20, (m.idleRun - 4) * 2); n.push(`撤離途中停留了 ${m.idleRun.toFixed(0)} 秒`); }
@@ -7779,7 +7978,7 @@ function scoreRun(g) {
   {
     let s = 100; const n = [];
     s -= m.lookBacks * 18; if (m.lookBacks) n.push(`撤離時回頭 ${m.lookBacks} 次`); else n.push('撤離時視線保持朝前');
-    const d = dec.incident || dec.incident_lobby || dec.incident_fab; if (d && d.id === 'look') { s -= 20; n.push('朝聲音來源走過去看'); }
+    const d = dec.incident || dec.incident_lobby || dec.incident_fab || dec.incident_insider; if (d && d.id === 'look') { s -= 20; n.push('朝聲音來源走過去看'); }
     res.noLookBack = clamp(Math.round(s), 0, 100); notes.noLookBack = n;
   }
   // 3 不對峙
@@ -7876,10 +8075,10 @@ const EVENT_META = {
   hideStart: ['開始躲藏', 'hide'], door_lock: ['鎖門', 'hide'], lightOff: ['關燈', 'hide'], barricade: ['推櫃子堵門', 'hide'], phoneRing: ['手機來電', 'warn'],
   phoneStop: ['手機停止響鈴', 'info'], phoneSetting: ['調整手機聲音', 'info'], dial: ['撥打電話', 'alert'], reportDone: ['完成報案', 'alert'], doorRattle: ['暴徒試門', 'danger'],
   doorPeek: ['暴徒開門查看', 'danger'], police: ['警方抵達', 'alert'], escaped: ['撤離到安全處', 'run'], pa: ['中控室廣播', 'info'], fail: ['被發現', 'danger'], close: ['與暴徒距離過近', 'danger'],
-  asForced: ['嫌犯強行通過風除室', 'danger'], coworkerSaved: ['帶同事一起行動', 'run'], quickReply: ['用訊息回覆來電', 'hide'], callControl: ['通報中控室', 'alert'], call119: ['撥打 119', 'alert'], airEmergency: ['按下風除室緊急開門', 'info'],
-  helpPointReport: ['當面回報', 'alert'],
+  asForced: ['嫌犯強行通過風除室', 'danger'], fabExitForced: ['嫌犯從戶外撞開 Fab 逃生門', 'danger'],coworkerSaved: ['帶同事一起行動', 'run'], quickReply: ['用訊息回覆來電', 'hide'], callControl: ['通報中控室', 'alert'], call119: ['撥打 119', 'alert'], airEmergency: ['按下風除室緊急開門', 'info'],
+  helpPointReport: ['當面回報', 'alert'], insiderTurn: ['同事突然持械攻擊', 'danger'],
 };
-const DEC_NAMES = { incident: '事件初期', incident_fab: '事件初期', incident_lobby: '事件初期', blocked: '遇到暴徒', fakeGuard: '門外有人叫門', police: '警方到場' };
+const DEC_NAMES = { incident: '事件初期', incident_fab: '事件初期', incident_lobby: '事件初期', incident_insider: '事件初期', blocked: '遇到暴徒', fakeGuard: '門外有人叫門', police: '警方到場' };
 
 // 原本只能滑鼠點的卡片／時間軸列：補上 Tab 聚焦與 Enter／空白鍵觸發
 function kbdAct(el, fn) {
@@ -7980,6 +8179,12 @@ class Debrief {
     for (const it of all) { const v = summary.res[it.id]; if (v == null || v >= 80) continue; cards.append(h('article', { class: 'db-card' }, h('h3', {}, h('span', { text: it.zh }), h('small', { text: it.en })), h('p', { class: 'what', text: (summary.notes[it.id] || []).join('；') }), h('p', { class: 'tip', text: it.tip }))); }
     if (r.failLesson) cards.prepend(h('article', { class: 'db-card lost' }, h('h3', { text: '這次失敗的原因' }), h('p', { class: 'tip', text: r.failLesson })));
     if (!cards.childElementCount) cards.append(h('article', { class: 'db-card good' }, h('h3', { text: '表現穩定' }), h('p', { class: 'tip', text: '各項原則都做得很好。下次換一個起點，或挑戰「專項：躲＋報」。' })));
+    // 內部威脅說明卡：說清楚這是虛構的訓練情境（排在失敗原因之後、其他檢討之前）
+    const IT = S.insiderThreat || {};
+    if (r.truth && r.truth.insider && IT.debriefNote) {
+      const note = h('article', { class: 'db-card db-insider' }, h('h3', { text: g.director.fmt(IT.debriefTitle || '這一局：內部人員威脅') }), h('p', { class: 'tip', text: g.director.fmt(IT.debriefNote) }));
+      const lost = cards.querySelector('.lost'); if (lost) lost.after(note); else cards.prepend(note);
+    }
     // 撤離方向提示（只提示、不計分）：跑（撤離）相關結局才顯示，專項「躲＋報」不顯示
     if (r.mode !== 'hide' && (r.outcome === 'escaped' || (r.outcome === 'failed' && !r.phaseHide)) && S.lines.debriefEscapeDirection) {
       const dirCard = h('article', { class: 'db-card db-escdir' }, h('h3', { text: '撤離方向' }), h('p', { class: 'tip', text: S.lines.debriefEscapeDirection }));
@@ -8027,7 +8232,7 @@ class Debrief {
     g.actors.forEach((act, i) => {
       const sa = a.a[i], sb = b.a[i] || sa; if (!sa) { act.visible = false; return; }
       act.x = L(sa[0], sb[0]); act.z = L(sa[1], sb[1]); act.yaw = LA(sa[2], sb[2]); act.pose.amp = sa[3]; act.pose.phase = L(sa[4], sb[4] < sa[4] ? sa[4] : sb[4]);
-      act.pose.crouch = sa[5]; act.visible = !!sa[6]; act.pose.handsUp = sa[7]; act.pose.sit = sa[8]; act.pose.look = 0; act.pose.push = 0;
+      act.pose.crouch = sa[5]; act.visible = !!sa[6]; act.pose.handsUp = sa[7]; act.pose.sit = sa[8]; act.pose.lie = sa[9] || 0; act.pose.look = 0; act.pose.push = 0;
     });
     // 門狀態
     if (this.appliedDoor < 0 || t < this.lastT) { for (const d of g.world.doors) { d.open = 0; d.locked = false; } this.appliedDoor = 0; }
@@ -8224,7 +8429,7 @@ function setupAggUI(g) {
 /* ============================================================
  * 18-main：啟動、情境載入、標題畫面、主迴圈
  * ============================================================ */
-const GAME_VERSION = 'v2.6';
+const GAME_VERSION = 'v2.7';
 // 難度：speed 嫌犯速度倍率、decision 決策秒數增減、count 嫌犯人數（0＝依教材機率）、hunt 往玩家附近搜索的機率、ringTwice 躲藏時手機響第二次
 const LEVELS = {
   easy: { zh: '新手', speed: 0.85, decision: 3, count: 1, hunt: 0.4, ringTwice: false, coach: true },
